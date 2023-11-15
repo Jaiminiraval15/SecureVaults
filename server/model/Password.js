@@ -15,6 +15,7 @@ const passwordSchema = mongoose.Schema({
         default:null,
         required:true
     },
+
     //to which folder category will that password belong refering to folder model
 
     folderid:{
@@ -23,6 +24,12 @@ const passwordSchema = mongoose.Schema({
         required: true
 
     }
+    // userid:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true
+
+    // },
 })
 const Password = mongoose.model('Password',passwordSchema)
 module.exports = Password

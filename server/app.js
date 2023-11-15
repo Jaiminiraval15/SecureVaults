@@ -12,3 +12,6 @@ mongoose.connect(process.env.db_url,{
         console.log("DB connected")
     })
 })
+app.use(express.json());
+const folderRoutes = require('./routers/folderRoutes')
+app.use('/api/folder',folderRoutes);
