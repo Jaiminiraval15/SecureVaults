@@ -60,5 +60,26 @@ const deleteFolder = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+const updateFolder =(async (req,res)=>{
+    try {
+        const folderid = req.params.folderid;
+        const folder = await Folder.findById(folderid);
+        const folderName = req.body.folderName;
+    
+        if(!folder){
+            console.log("Folder not found");
+            return res.status(404).json({ error: 'Folder not found' });
+        } 
+        folder.folderName = folderName;
+        const updatedFolder = await folder.save();
+        res.status(200).json(updatedFolder);
+    } catch (error) {
+        if (error.name === 'Cast Error'){
+            return res.status(404).json({error : "Not found"});
+        }
+        res.status(500).json({error : error.message})
+    }
+   
 
-module.exports = { addFolder, getAll,deleteFolder };
+})
+module.exports = { addFolder, getAll,deleteFolder,updateFolder };
