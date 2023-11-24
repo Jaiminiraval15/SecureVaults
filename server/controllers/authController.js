@@ -10,7 +10,7 @@ const handleErrors = (err)=>{
           });
     }
     //duplicate error
-    if (errors.code === 11000){
+    if (err.code === 11000){
       errors.email = 'Email is already registered';
       return errors;
     }

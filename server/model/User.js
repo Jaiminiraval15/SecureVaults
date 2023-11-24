@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const {isEmail} = require('validator')
+const bcrypt = require('bcrypt')
 const userSchema = mongoose.Schema({
     firstname:{
         type:String,
@@ -26,14 +27,19 @@ const userSchema = mongoose.Schema({
         required:[true,'Enter password']
     }
 })
-const User = mongoose.model('User',userSchema)
-module.exports = User
+
+
+//password hashing before saving passwords to db
+userSchema.pre('save', async function (next){
+    const salt =  await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password,salt);
+    console.log("new user will be created and saved to db");
+    next();
+})
 //fire a function after doc is saved to db
 userSchema.post('save',function (doc,next){
     console.log("new user created and saved to db",doc);
     next();
 })
-userSchema.pre('save',function (next){
-    console.log("new user will be created and saved to db");
-    next();
-})
+const User = mongoose.model('User',userSchema)
+module.exports = User
