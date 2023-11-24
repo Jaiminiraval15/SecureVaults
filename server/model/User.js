@@ -41,5 +41,20 @@ userSchema.post('save',function (doc,next){
     console.log("new user created and saved to db",doc);
     next();
 })
+//static method to login user
+userSchema.statics.login = async function(email,password){
+    const user = await this.findOne({email})
+    if(user){
+       const auth = await bcrypt.compare(password,user.password)
+        //if pw match
+    if(auth){
+        return user;    
+    }
+    throw Error('Incorrect password')
+}
+   
+    throw Error('Incorrect email')
+
+}
 const User = mongoose.model('User',userSchema)
 module.exports = User
