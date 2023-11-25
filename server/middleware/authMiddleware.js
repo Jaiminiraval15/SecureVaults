@@ -8,12 +8,18 @@ const requireAuth = async (req,res,next) =>{
         return res.status(401).json({error : 'Authorization token is required'})
 
     }
+    //get token from the authorization header
     const token = authorization.split(' ')[1]
     try {
         const {_id} = jwt.verify(token,process.env.secret_key)
         req.user = await User.findOne({_id}).select('_id')
-        next()
+         // Check if the token has expired
+         if (token.exp < Date.now() / 1000) {
+            return res.status(401).json({ error: 'Token expired' });
+        }
+        next();
     } catch (error) {
+        
         res.status(401).json({error : 'Request is not authorized'})
     }
 }
