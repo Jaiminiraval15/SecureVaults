@@ -5,6 +5,12 @@ const fSchema = new mongoose.Schema({
         default : null,
         unique : true,
         required : true
+    },
+    userid : {
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required : [true,'Userid is required']
+
     }
 });
 const folder = mongoose.model('Folders',fSchema);

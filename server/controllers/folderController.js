@@ -1,7 +1,8 @@
 const Folder = require('../model/Folder');
 const getAll = (async (req, res) => {
     try {
-        const folder = await Folder.find();
+        const userid = req.userid
+        const folder = await Folder.find({userid : userid});
         res.send(folder);
     }
     catch (error) {
@@ -11,15 +12,21 @@ const getAll = (async (req, res) => {
 })
 const addFolder = (async (req, res) => {
     try {
-        const folderName = req.body.folderName;
+        const userid = req.userid
+        const {folderName }= req.body;
         const folder = new Folder({
-            folderName
+            folderName,
+            userid : userid
         })
         await folder.save();
         res.json(folder);
         res.send(folder);
     } catch (error) {
-        res.status(400).json({ error: "Folder exists!" })
+        // duplicate error
+        if (error.code === 11000) {
+            return res.status(400).json({ error: "Folder already exists" });
+          }     
+        res.status(500).json({ error: error.message })
     }
 
 })
@@ -36,6 +43,9 @@ const deleteFolder = async (req, res) => {
             console.log("Folder not found");
             return res.status(404).json({ error: 'Folder not found' });
         }
+        if (folder.userid.toString() !== req.userid){
+            return res.status(403).json({error : 'Permission not granted'})
+        }
 
         // Delete the folder
         await Folder.findByIdAndDelete(folderid);
@@ -47,6 +57,8 @@ const deleteFolder = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+
 const updateFolder =(async (req,res)=>{
     try {
         const folderid = req.params.folderid;
@@ -57,6 +69,9 @@ const updateFolder =(async (req,res)=>{
             console.log("Folder not found");
             return res.status(404).json({ error: 'Folder not found' });
         } 
+        if (folder.userid.toString() !== req.userid) {
+            return res.status(403).json({ error: "Permission is denied" });
+          }
         folder.folderName = folderName;
         const updatedFolder = await folder.save();
         res.status(200).json(updatedFolder);
