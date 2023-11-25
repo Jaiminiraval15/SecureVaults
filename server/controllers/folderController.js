@@ -23,19 +23,6 @@ const addFolder = (async (req, res) => {
     }
 
 })
-// const deleteFolder = (async (req,res)=>{
-//     try {
-//         //const folderid = req.params.folderid;
-//         const folder = await Folder.findById({_id:req.params.folderid});
-//         if(!folder){
-//             res.status(400).json({error:'Folder not found'});
-//         }
-//         await Folder.findByIdAndDelete({_id:req.params.folderid});
-
-//     } catch (error) {
-//         res.status(500).json({error : error.message});
-//     }
-// })
 const deleteFolder = async (req, res) => {
     try {
         const folderid = req.params.folderid;
