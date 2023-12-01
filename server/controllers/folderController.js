@@ -47,7 +47,7 @@ const deleteFolder = async (req, res) => {
         if (folder.userid._id.toString() !== req.userid._id.toString()){
             return res.status(403).json({error : 'Permission not granted'})
         }
-
+        await Password.deleteMany({ folderid: folderId });
         // Delete the folder
         await Folder.findByIdAndDelete(folderid);
 
