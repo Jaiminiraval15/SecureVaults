@@ -1,7 +1,7 @@
 const Folder = require('../model/Folder');
 const getAll = (async (req, res) => {
     try {
-        const userid = req.userid
+        const userid = req.userid.id
         const folder = await Folder.find({userid : userid});
         res.send(folder);
     }
@@ -32,6 +32,7 @@ const addFolder = (async (req, res) => {
 })
 const deleteFolder = async (req, res) => {
     try {
+        
         const folderid = req.params.folderid;
         console.log("Folder ID:", folderid);
 
@@ -43,7 +44,7 @@ const deleteFolder = async (req, res) => {
             console.log("Folder not found");
             return res.status(404).json({ error: 'Folder not found' });
         }
-        if (folder.userid.toString() !== req.userid){
+        if (folder.id.toString() !== req.userid){
             return res.status(403).json({error : 'Permission not granted'})
         }
 
@@ -64,18 +65,25 @@ const updateFolder =(async (req,res)=>{
         const folderid = req.params.folderid;
         const folder = await Folder.findById(folderid);
         const folderName = req.body.folderName;
-    
+        console.log("User ID from request:", req.userid);
+        console.log("User ID from request:", req.userid._id.toString());
+        console.log("User ID from folder:", folder.userid);
+        console.log("User ID type from folder:", typeof folder.userid.toString());
+        console.log("User ID type from request:", typeof req.userid);
+          console.log("Comparison result:", folder.userid.toString()=== req.userid);
         if(!folder){
             console.log("Folder not found");
             return res.status(404).json({ error: 'Folder not found' });
         } 
-        if (folder.userid.toString() !== req.userid) {
+        if (folder.userid._id.toString() !== req.userid._id.toString()) {
             return res.status(403).json({ error: "Permission is denied" });
           }
         folder.folderName = folderName;
         const updatedFolder = await folder.save();
         res.status(200).json(updatedFolder);
-    } catch (error) {
+
+    }
+     catch (error) {
         if (error.name === 'Cast Error'){
             return res.status(404).json({error : "Not found"});
         }
