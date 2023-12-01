@@ -39,12 +39,12 @@ const deleteFolder = async (req, res) => {
         // Check if the folder exists
         const folder = await Folder.findById(folderid);
         console.log("Found Folder:", folder);
-
+        console.log(folder.userid.toString())
         if (!folder) {
             console.log("Folder not found");
             return res.status(404).json({ error: 'Folder not found' });
         }
-        if (folder.id.toString() !== req.userid){
+        if (folder.userid._id.toString() !== req.userid._id.toString()){
             return res.status(403).json({error : 'Permission not granted'})
         }
 
@@ -54,6 +54,9 @@ const deleteFolder = async (req, res) => {
         console.log("Folder deleted successfully");
         res.json({ message: 'Folder deleted successfully', deletedFolder: folder });
     } catch (error) {
+        if (error.name === "CastError") {
+            return res.status(404).json({ error: "Folder is not found" });
+          }
         console.error('Error deleting folder:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
