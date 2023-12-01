@@ -1,4 +1,5 @@
 const mongoose =require('mongoose');
+//const bcrypt = require('bcrypt')
 const passwordSchema = mongoose.Schema({
     passwordName: {
         type: String,
@@ -23,13 +24,18 @@ const passwordSchema = mongoose.Schema({
         ref: 'Folder',
         required: true
 
-    }
-    // userid:{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true
+    },
+    userid:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
 
-    // },
+    },
 })
+// passwordSchema.pre("save", async function (next) {
+//     const salt = await bcrypt.genSalt();
+//     this.password = await bcrypt.hash(this.password, salt);
+//     next();
+//   });
 const Password = mongoose.model('Password',passwordSchema)
 module.exports = Password
