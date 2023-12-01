@@ -26,4 +26,25 @@ const addPassword = (async (req,res)=>{
         res.status(500).json({error : error.message});
     }
 })
-module.exports = {getAllPasswords,addPassword}
+const updatePassword = (async (req,res)=>{
+    try {
+        const passwordid = req.params.passwordid
+        const {passwordName,password,username,folderid} = req.body
+        const vault = await Password.findById(passwordid)
+        if(!vault) {
+            res.status(400).json({error : ' not found'})
+        }
+        if(vault.userid._id.toString() !== req.userid._id.toString()){
+            res.status(402).json({error : ' not allowed to access'})
+        }
+        vault.Password = password,
+        vault.passwordName = passwordName,
+        vault.folderid = folderid,
+        vault.username = username
+        const updatedVault = await vault.save()
+        res.status(200).json(updatedVault)
+    } catch (error) {
+        return res.status(500).json({error : error.message})
+    }
+})
+module.exports = {getAllPasswords,addPassword,updatePassword}
