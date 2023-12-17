@@ -9,7 +9,8 @@ export default function Nav() {
             display : 'block',
             fontSize : '2em',
             float : 'left',
-            fontFamily : 'fantasy'  
+            fontFamily : 'fantasy' ,
+            position : 'static' 
         }}>SecureVaults</Navbar>
         </>
     )

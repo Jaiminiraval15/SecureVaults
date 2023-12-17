@@ -1,30 +1,30 @@
-import { Container, Row, Col } from "react-bootstrap";
+
+import { purple } from "@mui/material/colors";
 import Nav from "./Navbar";
+import { Container, Grid, Typography } from '@mui/material'
+
 export default function Home() {
     return (
         <>
 
-            <Container style={{ maxWidth: '100%', maxHeight: "auto" }} >
-                <div className="container" style={{
-                    display: " flex", alignItems: 'center'
-                }}>
-                    <div style={{ marginRight: "1em", flex: '1', minWidth: '3em', position: 'sticky' }}>
-                        <h2 style={{ marginTop: "0", fontWeight: 'bolder', color: 'purple' }}>Privacy's Finest Hour: One Password to Rule Them All</h2>
-                        <p style={{ textAlign: 'justify', fontFamily: 'revert-layer', fontSize: '1em' }}>
-                            Your data remains confidential and is inaccessible to anyone,<br />
-                            including us<br />
-                            Your master password is the exclusive key to unveil and manage your confidential vaults<br />
+           
+            <Container maxWidth='lg'>
+                <Grid container columnSpacing={4}>
+                    <Grid item xs={12} md={6}>
 
-                        </p>
-                    </div>
-                    <img
-                        className='abc'
-                        src='/static/passw.jpeg'
-                        alt="Profile"
-                        style={{ float: 'right', marginLeft: '1em', maxWidth: '100%', height: 'auto' }}
-                    ></img>
-
-                </div>
+                        <Typography variant="h5" mt={15} style={{ fontWeight: 'bolder', color: 'purple' }}>
+                            Privacy's Finest Hour: One Password to Rule Them All
+                            </Typography>
+                            <Typography variant="body1" style={{ color: 'purple', fontFamily: 'revert' }}>
+              Your data remains confidential and is inaccessible to anyone,<br />
+              including us<br />
+              Your master password is the exclusive key to unveil and manage your confidential vaults<br />
+            </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                    <img src='/static/passw.jpeg'style={{ maxWidth: '100%', height: 'auto' }}  ></img>
+                </Grid>
+            </Grid>
             </Container>
         </>
     )
