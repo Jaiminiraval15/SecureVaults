@@ -2,6 +2,7 @@ require('dotenv').config();
 const PORT = process.env.port || 3000;
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const app = express();
 const requireAuth = require('./middleware/authMiddleware')
 mongoose.connect(process.env.db_url,{
@@ -13,6 +14,7 @@ mongoose.connect(process.env.db_url,{
         console.log("DB connected")
     })
 })
+app.use(cors())
 app.use(express.json());
 const folderRoutes = require('./routers/folderRoutes')
 const passwordRoutes = require('./routers/passwordRoutes')
