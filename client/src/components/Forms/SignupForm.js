@@ -1,6 +1,7 @@
 
 import { Box, TextField,Button } from "@mui/material"
 import { useState } from "react"
+import { useSignup } from "../../hooks/useSignup"
 
 export default function SignupForm() {
     const [email, setEmail] = useState('')
@@ -8,8 +9,10 @@ export default function SignupForm() {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [userName, setUserName] = useState('')
+    const {signup, isLoading,error} = useSignup()
     const handleSubmit = async (e) => {
         e.preventDefault();
+        await signup(email,password,firstName,lastName,userName)
 
     }
     return (
@@ -90,9 +93,10 @@ export default function SignupForm() {
           value={password}
         />
 
-        <Button variant="outlined" type="submit">
+        <Button disabled={isLoading} variant="outlined" type="submit">
           Signup
         </Button>
+        {error && <div className='error'>{error}</div>}
       </form>
     </Box>
         </>

@@ -1,37 +1,17 @@
-
 import { Box,Button,TextField,FormControl,OutlinedInput } from "@mui/material"
 import { useState } from "react"
-import { useSignup } from "../../hooks/useSignup"
+import { useLogin } from "../../hooks/useLogin"
 export default function LoginForm(){
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
-    const {signup, isLoading,error} = useSignup()
+    const {login, isLoading,error} = useLogin()
     const handleSubmit =  async (e)=>{
         e.preventDefault();
-        console.log(email)
-        await signup(email,password)
+        await login(email,password)
 
     }
     return(
         <>
-         
-        {/* <form onSubmit={handleSubmit}>
-        <h3>Login</h3>
-       
-
-
-        <label>Email: </label>
-        <TextField id="outlined-basic" label="Email" variant="outlined" type='email' onChange={(e)=>setEmail(e.target.value)}
-         value={email} /><br/>
-
-        <label>Password:</label>
-   
-            <TextField id="outlined-basic" label="Required" variant="outlined" type='password'
-             onChange={(e)=>setPassword(e.target.value)} 
-        value={password}/><br/>
-        <Button variant="outlined" >Login</Button>
-       
-        </form> */}
        <Box
       sx={{
         display: "flex",
