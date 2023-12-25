@@ -1,12 +1,15 @@
 
 import { Box,Button,TextField,FormControl,OutlinedInput } from "@mui/material"
 import { useState } from "react"
-
+import { useSignup } from "../../hooks/useSignup"
 export default function LoginForm(){
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+    const {signup, isLoading,error} = useSignup()
     const handleSubmit =  async (e)=>{
         e.preventDefault();
+        console.log(email)
+        await signup(email,password)
 
     }
     return(
@@ -72,9 +75,10 @@ export default function LoginForm(){
           />
         </FormControl>
 
-        <Button variant="outlined" type="submit">
+        <Button disabled={isLoading} variant="outlined" type="submit">
           Login
         </Button>
+        {error && <div className='error'>{error}</div>}
       </form>
     </Box>
         </>

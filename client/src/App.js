@@ -5,10 +5,12 @@ import SignupForm from './components/Forms/SignupForm';
 import Home from './components/Home';
 import Nav from './components/Navbar';
 import {BrowserRouter,Routes,Route } from 'react-router-dom'
+import { AuthContextProvider } from './context/AuthContext';
 function App() {
   return (
    <>
-   {/* <Nav/> */}
+   <AuthContextProvider>
+   <Nav/>
    <BrowserRouter>
    <Routes>
     <Route path='/' exact element={<Home/>}></Route>
@@ -16,7 +18,7 @@ function App() {
     <Route path='/signup' exact element={<SignupForm/>}></Route>
    </Routes>
    </BrowserRouter>
-
+   </AuthContextProvider>
    </>
   );
 }
