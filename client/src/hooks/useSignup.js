@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { useEncryptionContext } from "./useEncryptionContext";
+import { useEncryptionFunction } from "./useEncryptionFunction";
 export const useSignup = () => {
     const [error,setError] = useState(null)
     const [isLoading,setIsLoading] = useState(false)
     const { dispatch } = useAuthContext();
+    const { dispatch: encryptionDispatch } = useEncryptionContext();
+    const { generateKey } = useEncryptionFunction()
     
     const signup = async (email,password,firstname,lastname,username) =>{
         setIsLoading(true)
@@ -19,6 +23,11 @@ export const useSignup = () => {
             setError(data.error)
         }
         if(res.ok){
+                   // Generate a key using the email and password
+        const key = generateKey(email, password);
+
+        // Save the key to the EncryptionContext
+        encryptionDispatch({ type: 'SET_KEY', payload: key });
             //save the user to localstorage
             localStorage.setItem('user',JSON.stringify(data))
             //update authContext
