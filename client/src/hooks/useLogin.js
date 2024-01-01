@@ -28,8 +28,8 @@ export const useLogin = () => {
 
         // Save the key to the EncryptionContext
         encryptionDispatch({ type: 'SET_KEY', payload: key });
-            //save the user to localstorage
-            localStorage.setItem('user',JSON.stringify(data))
+            //save the user to session
+            sessionStorage.setItem('user',JSON.stringify(data))
             //update authContext
             dispatch({type: 'LOGIN',payload:data})
             setIsLoading(false)

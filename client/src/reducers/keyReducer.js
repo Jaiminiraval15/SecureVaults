@@ -4,10 +4,10 @@ export const initialState = {
 export const keyReducer = (state,action) => {
     switch(action.type){
         case 'SET_KEY' :
-           window.localStorage.setItem("key",action.payload)
+           window.sessionStorage.setItem("key",action.payload)
            return action.payload
         case 'CLEAR_KEY' :
-            window.localStorage.removeItem("key")
+            window.sessionStorage.removeItem("key")
             return ""
         default :
             return state

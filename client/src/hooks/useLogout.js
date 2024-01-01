@@ -6,7 +6,7 @@ export const useLogout = () =>{
     const {dispatch :encryptionDispatch} = useEncryptionContext()
     const logout = () =>{
         //remove the user from local storage
-        localStorage.removeItem('user')
+        sessionStorage.removeItem('user')
         dispatch({type: 'LOGOUT'})
         encryptionDispatch({type:'CLEAR_KEY'})
 
