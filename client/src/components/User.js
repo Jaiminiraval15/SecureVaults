@@ -1,5 +1,93 @@
 
-import { Button,Link } from '@mui/material';
+// import { Button,Link } from '@mui/material';
+// import LoginForm from './Forms/LoginForm';
+// import SignupForm from './Forms/SignupForm';
+// import { useState } from 'react';
+// import { useLogout } from '../hooks/useLogout';
+// import { useAuthContext } from '../hooks/useAuthContext';
+
+// export default function User() {
+//   const [showForm, setShowForm] = useState(null);
+//   const { logout } = useLogout();
+//   const { user } = useAuthContext();
+
+//   const openSignup = () => {
+//     setShowForm('signup');
+//   };
+
+//   const openLogin = () => {
+//     setShowForm('login');
+//   };
+
+//   const handleSubmit = () => {
+//     logout();
+//   };
+
+//   return (
+//     <>
+//       {user && (
+//         <Link to="/logout" style={{ textDecoration: 'none' }}>
+//           <Button
+//             variant="outlined"
+//             color="primary"
+//             style={{
+//               color: 'purple',
+//               padding: '0.5em',
+//               display: 'block',
+//               float: 'right',
+//               marginRight: '1em',
+//               marginTop: '0.5em'
+//             }}
+//             onClick={handleSubmit}
+//           >
+//             Logout
+//           </Button>
+//         </Link>
+//       )}
+//       {!user && (
+//         <>
+//           <Link to="/signup" style={{ textDecoration: 'none' }}>
+//             <Button
+//               variant="outlined"
+//               style={{
+//                 color: 'purple',
+//                 padding: '0.5em',
+//                 display: 'block',
+//                 float: 'right',
+//                 marginRight: '1em',
+//                 marginTop: '0.5em'
+//               }}
+//               onClick={openSignup}
+//             >
+//               Signup
+//             </Button>
+//           </Link>
+//           <Link to="/login" style={{ textDecoration: 'none' }}>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               style={{
+//                 color: 'purple',
+//                 padding: '0.5em',
+//                 display: 'block',
+//                 float: 'right',
+//                 marginRight: '1em',
+//                 marginTop: '0.5em'
+//               }}
+//               onClick={openLogin}
+//             >
+//               Login
+//             </Button>
+//           </Link>
+//           {showForm === 'signup' && <SignupForm />}
+//           {showForm === 'login' && <LoginForm />}
+//         </>
+//       )}
+//     </>
+//   );
+// }
+import { Button, Dialog, DialogContent, DialogTitle, Link,IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import LoginForm from './Forms/LoginForm';
 import SignupForm from './Forms/SignupForm';
 import { useState } from 'react';
@@ -19,9 +107,14 @@ export default function User() {
     setShowForm('login');
   };
 
+  const handleClose = () => {
+    setShowForm(null);
+  };
+
   const handleSubmit = () => {
     logout();
   };
+  
 
   return (
     <>
@@ -46,41 +139,62 @@ export default function User() {
       )}
       {!user && (
         <>
-          <Link to="/signup" style={{ textDecoration: 'none' }}>
-            <Button
-              variant="outlined"
+          <Button
+            variant="outlined"
+            style={{
+              color: 'purple',
+              padding: '0.5em',
+              display: 'block',
+              float: 'right',
+              marginRight: '1em',
+              marginTop: '0.5em'
+            }}
+            onClick={openSignup}
+          >
+            Signup
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{
+              color: 'purple',
+              padding: '0.5em',
+              display: 'block',
+              float: 'right',
+              marginRight: '1em',
+              marginTop: '0.5em'
+            }}
+            onClick={openLogin}
+          >
+            Login
+          </Button>
+          <Dialog open={showForm !== null} onClose={handleClose}>
+            <DialogTitle>
+              
+              <IconButton
+                edge="end"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+                style={{ position: 'absolute', top: '1px', right: '3px' }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent
               style={{
-                color: 'purple',
-                padding: '0.5em',
-                display: 'block',
-                float: 'right',
-                marginRight: '1em',
-                marginTop: '0.5em'
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+                width: 'auto'
               }}
-              onClick={openSignup}
             >
-              Signup
-            </Button>
-          </Link>
-          <Link to="/login" style={{ textDecoration: 'none' }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{
-                color: 'purple',
-                padding: '0.5em',
-                display: 'block',
-                float: 'right',
-                marginRight: '1em',
-                marginTop: '0.5em'
-              }}
-              onClick={openLogin}
-            >
-              Login
-            </Button>
-          </Link>
-          {showForm === 'signup' && <SignupForm />}
-          {showForm === 'login' && <LoginForm />}
+              {showForm === 'signup' && <SignupForm />}
+              {showForm === 'login' && <LoginForm />}
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </>
