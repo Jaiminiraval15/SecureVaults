@@ -7,17 +7,20 @@ import Nav from './components/Navbar';
 import {BrowserRouter,Routes,Route } from 'react-router-dom'
 import { AuthContextProvider } from './context/AuthContext';
 import { EncryptionContextProvider } from './context/EncryptionContext';
+import Folder from './components/Folder/folder';
 function App() {
+ 
   return (
    <>
    <AuthContextProvider>
     <EncryptionContextProvider>
-   <Nav/>
+   
    <BrowserRouter>
+   <Nav/>
    <Routes>
-    <Route path='/' exact element={<Home/>}></Route>
-    <Route path='/login' exact element={<LoginForm/>}></Route>
-    <Route path='/signup' exact element={<SignupForm/>}></Route>
+    <Route index exact element={<Home/>}></Route>
+    
+    <Route path='/folder' exact element={<Folder/>}></Route>
    </Routes>
    </BrowserRouter>
    </EncryptionContextProvider>
