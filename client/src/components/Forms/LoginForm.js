@@ -70,5 +70,6 @@ export default function LoginForm() {
         {error && <div className='error' style={{ marginTop: "10px", textAlign: "center" }}>{error}</div>}
       </form>
     </Box>
+  
   );
 }

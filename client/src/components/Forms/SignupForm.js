@@ -113,6 +113,7 @@ export default function SignupForm() {
         )}
       </form>
     </Box>
+   
   );
 }
 
