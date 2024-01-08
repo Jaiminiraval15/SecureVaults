@@ -36,25 +36,27 @@ export default function LoginForm() {
 
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <TextField
-            id="outlined-basic"
+           name="email"
             label="Email"
             variant="outlined"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            size="small"
+            id="email"
+            autoComplete="off" 
           />
         </FormControl>
 
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <TextField
-            id="outlined-basic"
+          id ="password"
+            name="password"
             label="Password"
             variant="outlined"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            size="small"
+            autoComplete="off" 
           />
         </FormControl>
 

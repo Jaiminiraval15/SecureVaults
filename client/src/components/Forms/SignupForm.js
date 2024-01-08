@@ -46,6 +46,7 @@ export default function SignupForm() {
             onChange={(e) => setFirstName(e.target.value)}
             value={firstName}
             size="small"
+            autoComplete="off" 
           />
         </FormControl>
 
@@ -58,6 +59,7 @@ export default function SignupForm() {
             onChange={(e) => setLastName(e.target.value)}
             value={lastName}
             size="small"
+            autoComplete="off" 
           />
         </FormControl>
 
@@ -70,6 +72,7 @@ export default function SignupForm() {
             onChange={(e) => setUserName(e.target.value)}
             value={userName}
             size="small"
+            autoComplete="off" 
           />
         </FormControl>
 
@@ -82,6 +85,7 @@ export default function SignupForm() {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             size="small"
+            autoComplete="off" 
           />
         </FormControl>
 
@@ -94,6 +98,7 @@ export default function SignupForm() {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             size="small"
+            autoComplete="off" 
           />
         </FormControl>
 

@@ -1,35 +1,25 @@
 
 import { useEffect,useState } from "react"
+import { useAuthContext } from "../../hooks/useAuthContext";
 export default function Folder(){
-    
+    const { user } = useAuthContext()
 const [folders,setFolders] = useState([])
-const token = sessionStorage.getItem("token");
-// useEffect(()=>{
-//     fetch("http://localhost:2003/api/folder/",{
-//             method : "GET",
-//             headers : {
-//                 'Content-Type' : 'application/json',
-//                 Authorization: `Token ${token}`
-//             }
-//     }
-// )
-// .then(response => response.json())
-// .then(data => setFolders(data))
-// .catch(error => console.error('Error fetching folders:', error));
-// },[token]);
+const token = sessionStorage.getItem("user.token");
+
 useEffect(() => {
     // Make sure to use the correct URL and wrap the fetch inside useEffect
+    console.log('Effect triggered');
     fetch("http://localhost:2003/api/folder/", {
         method: "GET",
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Token ${token}`
+            // 'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
         }
     })
     .then(response => response.json())
     .then(data => setFolders(data))
     .catch(error => console.error('Error fetching folders:', error));
-}, [token]);
+}, [user]);
     return(
         <>
               <div>
