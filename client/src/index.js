@@ -5,12 +5,37 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/AuthContext';
 import { EncryptionContext, EncryptionContextProvider } from './context/EncryptionContext';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './components/Home';
+import Folder from './components/Folder/folder';
+import { useAuthContext } from './hooks/useAuthContext';
+
+const router = createBrowserRouter([
+  {
+    path:'/',
+    element:<Layout/>,
+    children:[
+      {
+        path:'/',
+        element:<Home/>
+      },
+      {
+        path:'folder',
+        element: <Folder/>
+        
+      }
+    ]
+    }
+  
+]
+)
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
        <AuthContextProvider>
     <EncryptionContextProvider>
-    <App />
+    <RouterProvider router={router}></RouterProvider>
     </EncryptionContextProvider>
     </AuthContextProvider>
   </React.StrictMode>

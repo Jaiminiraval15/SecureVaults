@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useEncryptionContext } from "./useEncryptionContext";
 import { useEncryptionFunction } from "./useEncryptionFunction";
-
+import { useNavigate } from 'react-router-dom'; 
 export const useLogin = () => {
     const [error,setError] = useState(null)
     const [isLoading,setIsLoading] = useState(false)
     const { dispatch } = useAuthContext()
     const { dispatch: encryptionDispatch } = useEncryptionContext();
     const { generateKey } = useEncryptionFunction()
+    const navigate = useNavigate();
     const login = async (email,password) =>{
         setIsLoading(true)
         setError(null)
@@ -33,7 +34,7 @@ export const useLogin = () => {
             //update authContext
             dispatch({type: 'LOGIN',payload:data})
             setIsLoading(false)
-           
+           navigate('/folder')
 
         }
 

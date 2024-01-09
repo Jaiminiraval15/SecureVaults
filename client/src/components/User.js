@@ -5,18 +5,20 @@ import SignupForm from './Forms/SignupForm';
 import { useState } from 'react';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
-
+import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 export default function User() {
   const [showForm, setShowForm] = useState(null);
   const { logout } = useLogout();
   const { user } = useAuthContext();
-
+  const navigate = useNavigate();
   const openSignup = () => {
     setShowForm('signup');
   };
 
   const openLogin = () => {
     setShowForm('login');
+   
   };
 
   const handleClose = () => {
@@ -25,6 +27,7 @@ export default function User() {
 
   const handleSubmit = () => {
     logout();
+    navigate('/')
   };
   
 
