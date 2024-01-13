@@ -1,12 +1,13 @@
 const Folder = require('../model/Folder');
+const Password = require('../model/Password');
 const getAll = (async (req, res) => {
     try {
-        const userid = req.userid.id
+        const userid = req.userid
         const folder = await Folder.find({userid : userid});
-        res.send(folder);
+        res.status(200).json(folder);
     }
     catch (error) {
-        res.status(400).send('Cannot get folders!');
+        res.status(500).json({ error: error.message });
     }
 
 })
@@ -14,16 +15,20 @@ const addFolder = (async (req, res) => {
     try {
         const userid = req.userid
         const {folderName }= req.body;
+        console.log(req.body); // Log the request body
+        console.log("User ID from request:", req.userid);
         const folder = new Folder({
             folderName,
             userid : userid
         })
+      console.log("Folder:", folder);
         await folder.save();
         res.json(folder);
-        res.send(folder);
+ 
     } catch (error) {
         // duplicate error
         if (error.code === 11000) {
+            console.log("Folder already exists");
             return res.status(400).json({ error: "Folder already exists" });
           }     
         res.status(500).json({ error: error.message })
@@ -47,7 +52,7 @@ const deleteFolder = async (req, res) => {
         if (folder.userid._id.toString() !== req.userid._id.toString()){
             return res.status(403).json({error : 'Permission not granted'})
         }
-        await Password.deleteMany({ folderid: folderId });
+        await Password.deleteMany({ folderid: folderid });
         // Delete the folder
         await Folder.findByIdAndDelete(folderid);
 

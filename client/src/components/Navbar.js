@@ -1,5 +1,7 @@
 import User from './User';
 import { Navbar } from 'react-bootstrap';
+import { AppBar,Typography,Toolbar } from '@mui/material';
+import { Outlet } from 'react-router-dom';
 
 export default function Nav() {
 
@@ -13,8 +15,14 @@ export default function Nav() {
                 float: 'left',
                 fontFamily: 'fantasy',
                 position: 'static'
-            }}>SecureVaults</Navbar>
-            <User/>     
+            }}>SecureVaults
+       
+            </Navbar>
+            <User/>
+       
         </>
     )
 }
+
+
+

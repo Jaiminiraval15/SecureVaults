@@ -16,6 +16,7 @@ mongoose.connect(process.env.db_url,{
 })
 app.use(cors())
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const folderRoutes = require('./routers/folderRoutes')
 const passwordRoutes = require('./routers/passwordRoutes')
 const authRoutes = require('./routers/authRoutes')
