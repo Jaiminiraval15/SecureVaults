@@ -59,7 +59,8 @@ export default function Folder() {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
+                        'Authorization': `Bearer ${user.token}`,
+                        'User-Id': user.id // The server needs to know which user is making the request
                     }
                 });
 
