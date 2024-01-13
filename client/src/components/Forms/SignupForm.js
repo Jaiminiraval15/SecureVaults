@@ -75,7 +75,6 @@ export default function SignupForm() {
             autoComplete="off" 
           />
         </FormControl>
-
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <TextField
             id="outlined-basic"

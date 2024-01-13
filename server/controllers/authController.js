@@ -59,4 +59,8 @@ const login = (async(req,res)=>{
       res.status(400).json({errors})
     }
 })
-module.exports = {signup,login}
+const logout = (req,res)=>{
+  res.status(200).json({ message: 'Logout successful' });
+}
+
+module.exports = {signup,login,logout}
