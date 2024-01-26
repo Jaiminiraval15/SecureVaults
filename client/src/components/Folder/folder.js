@@ -13,12 +13,18 @@ export default function Folder() {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
-    const handleOpenDialog = () => {
+    const [editingFolder, setEditingFolder] = useState(null);
+    const handleOpenDialog = (folderId) => {
         setOpenDialog(true);
+        setEditingFolder(folderId); // Set the folder being edited
+        const folderToEdit = folders.find(folder => folder._id === folderId);
+        setNewFolderName(folderToEdit.folderName);
     };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setEditingFolder(null); // Clear editing state
+        setNewFolderName("");
     };
 
     const handleAddFolder = () => {
@@ -121,6 +127,40 @@ export default function Folder() {
             );
         }
     };
+    const handleUpdateFolder = async () => {
+        try {
+            // Make a request to the server to update the folder with the specified folderId
+            const response = await fetch(`http://localhost:2003/api/folder/${editingFolder}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify({ folderName: newFolderName })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Update the folder in the state
+            setFolders((prevFolders) =>
+                prevFolders.map((folder) =>
+                    folder._id === editingFolder ? { ...folder, folderName: newFolderName } : folder
+                )
+            );
+
+            // Clear editing state
+            setEditingFolder(null);
+            setNewFolderName("");
+
+            Swal.fire('Edited!', 'Your folder has been edited.', 'success');
+            handleCloseDialog(); // Close the dialog after editing
+        } catch (error) {
+            console.error('Error editing folder:', error);
+            Swal.fire('Error!', 'Something went wrong.', 'error');
+        }
+    };
     useEffect(() => {
         if(!user){
             navigate('/')
@@ -136,28 +176,41 @@ export default function Folder() {
             <Container maxWidth="lg">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                     <div>
-
                     </div>
-                    <Button variant="outlined"
+                    <Button
+                        variant="outlined"
                         color="primary"
-                        onClick={handleOpenDialog}
+                        onClick={() => handleOpenDialog(null)} // Pass null for adding new folder
                         style={{
-                            display: "flex", color: 'purple',
+                            display: "flex",
+                            color: 'purple',
                             padding: '0.5em',
                             float: 'right',
                             marginRight: '1em',
                             marginTop: '0.5em'
-                        }} >Add Folder</Button>
+                        }}
+                    >
+                        Add Folder
+                    </Button>
                 </div>
             </Container>
 
             <Container maxWidth="lg">
-                {/* <h2>The token is: {token}</h2> */}
-
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', color: 'purple', marginTop: '3em' }}>
                     {Array.isArray(folders) && folders.length > 0 ? (
-                        folders.map(folder => (
-                            <Card key={folder._id} sx={{ marginBottom: '3em', position:'relative' ,color: 'purple', minWidth: 275, width: '200px', marginRight: '10px', marginBottom: '10px' }}>
+                        folders.map((folder) => (
+                            <Card
+                                key={folder._id}
+                                sx={{
+                                    marginBottom: '3em',
+                                    position: 'relative',
+                                    color: 'purple',
+                                    minWidth: 275,
+                                    width: '200px',
+                                    marginRight: '10px',
+                                    marginBottom: '10px'
+                                }}
+                            >
                                 <CardContent>
                                     <Typography variant="h6" component="div">
                                         {folder.folderName}
@@ -168,11 +221,10 @@ export default function Folder() {
                                     style={{ position: 'absolute', top: '5px', right: '30px', cursor: 'pointer' }}
                                     onClick={() => handleDeleteFolder(folder._id)}
                                 />
-                             
                                 <EditIcon
                                     color="action"
                                     style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer' }}
-                                    // onClick={() => handleEditFolder(folder._id)}
+                                    onClick={() => handleOpenDialog(folder._id)}
                                 />
                             </Card>
                         ))
@@ -183,24 +235,29 @@ export default function Folder() {
             </Container>
 
             <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Add Folder</DialogTitle>
+                <DialogTitle>{editingFolder ? 'Edit Folder' : 'Add Folder'}</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="Folder Name"
                         variant="outlined"
                         fullWidth
-
                         autoComplete="off"
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
                     />
-                    <Button variant="contained" color="primary" onClick={handleAddFolder} style={{ marginTop: '1em' }}>
-                        Add Folder
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={editingFolder ? handleUpdateFolder : handleAddFolder}
+                        style={{ marginTop: '1em' }}
+                    >
+                        {editingFolder ? 'Update Folder' : 'Add Folder'}
                     </Button>
                 </DialogContent>
             </Dialog>
         </>
     );
+
 }
 
 
