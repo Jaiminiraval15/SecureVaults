@@ -10,7 +10,7 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import Folder from './components/Folder/folder';
 import { useAuthContext } from './hooks/useAuthContext';
-import GeneratePassword from './components/GeneratePassword';
+
 
 const router = createBrowserRouter([
   {

@@ -5,10 +5,12 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from "sweetalert";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 export default function Folder() {
     const { user } = useAuthContext();
     const [folders, setFolders] = useState([]);
     const token = user ? user.token : null;
+    const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
     const handleOpenDialog = () => {
@@ -120,7 +122,13 @@ export default function Folder() {
         }
     };
     useEffect(() => {
-        fetchData();
+        if(!user){
+            navigate('/')
+        }
+        else{
+            fetchData();
+        }
+       
     }, [user]);
 
     return (
