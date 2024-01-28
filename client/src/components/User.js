@@ -1,12 +1,13 @@
-import { Button, Dialog, DialogContent, DialogTitle, Link,IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import LoginForm from './Forms/LoginForm';
 import SignupForm from './Forms/SignupForm';
 import { useState } from 'react';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
 export default function User() {
   const [showForm, setShowForm] = useState(null);
   const { logout } = useLogout();
@@ -34,7 +35,8 @@ export default function User() {
   return (
     <>
       {user && (
-        <Link to="/logout" style={{ textDecoration: 'none' }}>
+        <>
+        <Link  style={{ textDecoration: 'none' }}>
           <Button
             variant="outlined"
             color="primary"
@@ -51,6 +53,23 @@ export default function User() {
             Logout
           </Button>
         </Link>
+        <Link to="/vault"   style={{
+              color: 'purple',
+              padding: '0.5em',
+              display: 'block',
+              float: 'right',
+              marginRight: '1em',
+              marginTop: '0.5em'
+            }}>Vault</Link>
+             <Link to="/folder"   style={{
+              color: 'purple',
+              padding: '0.5em',
+              display: 'block',
+              float: 'right',
+              marginRight: '1em',
+              marginTop: '0.5em'
+            }}>Folder</Link>
+        </>
       )}
       {!user && (
         <>

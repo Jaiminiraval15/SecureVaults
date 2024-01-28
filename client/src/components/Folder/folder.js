@@ -17,9 +17,10 @@ export default function Folder() {
     const handleOpenDialog = (folderId) => {
         setOpenDialog(true);
         setEditingFolder(folderId); // Set the folder being edited
-        const folderToEdit = folders.find(folder => folder._id === folderId);
-        setNewFolderName(folderToEdit.folderName);
+        const folderToEdit = folders.find((folder) => folder._id === folderId);
+        setNewFolderName(folderToEdit?.folderName || ''); // optional chaining 
     };
+    
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -52,7 +53,7 @@ export default function Folder() {
             .catch(error => {
                 console.error('Error adding folder:', error);
                 if (error.message.includes('HTTP error! Status: 400')) {
-                    // The server responded with a 400 status code
+                    
                     swal("Folder already exists", "", "error");
                 } else {
                     swal("Something went wrong", "", "error");
@@ -68,7 +69,7 @@ export default function Folder() {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`,
-                        'User-Id': user.id // The server needs to know which user is making the request
+                        'User-Id': user.id 
                     }
                 });
 
@@ -85,7 +86,7 @@ export default function Folder() {
     };
     const handleDeleteFolder = async (folderId) => {
         try {
-            // Display a SweetAlert confirmation dialog
+            
             const result = await Swal.fire({
                 title: 'Are you sure?',
                 icon: 'warning',
@@ -96,7 +97,7 @@ export default function Folder() {
             });
 
             if (result.isConfirmed) {
-                // Make a request to the server to delete the folder with the specified folderId
+                
                 const response = await fetch(`http://localhost:2003/api/folder/${folderId}`, {
                     method: 'DELETE',
                     headers: {
@@ -109,7 +110,7 @@ export default function Folder() {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                // Delete the folder from the state
+                // Remove the folder 
                 setFolders((prevFolders) => prevFolders.filter(folder => folder._id !== folderId));
 
                 Swal.fire(
@@ -129,7 +130,7 @@ export default function Folder() {
     };
     const handleUpdateFolder = async () => {
         try {
-            // Make a request to the server to update the folder with the specified folderId
+            
             const response = await fetch(`http://localhost:2003/api/folder/${editingFolder}`, {
                 method: 'PUT',
                 headers: {
@@ -143,19 +144,18 @@ export default function Folder() {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            // Update the folder in the state
+            // Update the folder 
             setFolders((prevFolders) =>
                 prevFolders.map((folder) =>
                     folder._id === editingFolder ? { ...folder, folderName: newFolderName } : folder
                 )
             );
 
-            // Clear editing state
             setEditingFolder(null);
             setNewFolderName("");
 
             Swal.fire('Edited!', 'Your folder has been edited.', 'success');
-            handleCloseDialog(); // Close the dialog after editing
+            handleCloseDialog(); // Close dialog 
         } catch (error) {
             console.error('Error editing folder:', error);
             Swal.fire('Error!', 'Something went wrong.', 'error');
@@ -180,14 +180,15 @@ export default function Folder() {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => handleOpenDialog(null)} // Pass null for adding new folder
+                        onClick={() => handleOpenDialog(null)} 
                         style={{
                             display: "flex",
                             color: 'purple',
                             padding: '0.5em',
-                            float: 'right',
+                      
                             marginRight: '1em',
-                            marginTop: '0.5em'
+                            marginTop: '3.5em',
+                            justifyContent:'flex-end'
                         }}
                     >
                         Add Folder

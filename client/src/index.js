@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import Folder from './components/Folder/folder';
 import { useAuthContext } from './hooks/useAuthContext';
+import Vault from './components/Vault/vault';
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,9 @@ const router = createBrowserRouter([
         path:'folder',
         element: <Folder/>
         
+      },{
+        path:'vault',
+        element:<Vault/>
       }
     
     ]
