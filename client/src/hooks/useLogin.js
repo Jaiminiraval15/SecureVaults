@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useEncryptionContext } from "./useEncryptionContext";
-import { useEncryptionFunction } from "./useEncryptionFunction";
+import {useEncryptionFunction}  from "./useEncryptionFunction";
 import { useNavigate } from 'react-router-dom'; 
 export const useLogin = () => {
     const [error,setError] = useState(null)

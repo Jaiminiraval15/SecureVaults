@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useEncryptionContext } from "./useEncryptionContext";
-import { useEncryptionFunction } from "./useEncryptionFunction";
+import {useEncryptionFunction } from "./useEncryptionFunction";
 export const useSignup = () => {
     const [error,setError] = useState(null)
     const [isLoading,setIsLoading] = useState(false)

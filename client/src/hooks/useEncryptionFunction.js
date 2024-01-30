@@ -8,10 +8,16 @@ export const useEncryptionFunction = () => {
         return CryptoJS.PBKDF2(password, hash, { keySize: 256 / 32, iterations: 100 }).toString()
     }
     const encrypt = (data) => {
+        if (!state) {
+            throw new Error('Encryption context not properly initialized');
+          }
         let encryptedData = CryptoJS.AES.encrypt(data, state.key).toString()
         return encryptedData
     }
     const decrypt = (data) => {
+        if (!state) {
+            throw new Error('Encryption context not properly initialized');
+          }
         let decryptData = CryptoJS.AES.decrypt(data, state.key)
         return decryptData.toString(CryptoJS.enc.Utf8)
     }

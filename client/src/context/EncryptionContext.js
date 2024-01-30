@@ -14,7 +14,7 @@ export const EncryptionContextProvider = ({children})=>{
     }
    },[])
    return (
-    <EncryptionContext.Provider value={{ key: state.key, dispatch }}>
+    <EncryptionContext.Provider value={{ state, dispatch }}>
       {children}
     </EncryptionContext.Provider>
   );
