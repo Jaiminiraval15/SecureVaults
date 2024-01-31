@@ -91,7 +91,7 @@ export default function Vault() {
 
   const handleAddVaultSubmit = async () => {
     try {
-       
+      const encryptedUserName = encrypt(userName);
       const encryptedPassword = encrypt(password);
       const response = await fetch(`http://localhost:2003/api/password/addpassword`, {
         method: "POST",
@@ -103,9 +103,8 @@ export default function Vault() {
           
             password: encryptedPassword,
             passwordName: passwordName,
-          folderId: selectedFolder,
-         
-          userName: userName,
+            folderid: selectedFolder, 
+            username: encryptedUserName, 
           
         }),
       });
@@ -221,11 +220,14 @@ export default function Vault() {
       >
         <DialogTitle>Vault Details</DialogTitle>
         <DialogContent>
+        <Typography variant="h6">
+        Folder Name: {selectedVault && selectedVault.folderid ? selectedVault.folderid.folderName : ""}
+          </Typography>
           <Typography variant="h6">
             Password Name: {selectedVault ? selectedVault.passwordName : ""}
           </Typography>
           <Typography variant="h6">
-            Username: {selectedVault ? decrypt(selectedVault.userName) : ""}
+            Username: {selectedVault ? decrypt(selectedVault.username) : ""}
           </Typography>
           <Typography variant="h6">
             Password: {selectedVault ? decrypt(selectedVault.password) : ""}
@@ -241,7 +243,9 @@ export default function Vault() {
               onClick={() => handleCardClick(v._id)}
             >
               <CardContent>
-                <Typography variant="h6">{v.passwordName}</Typography>
+              <Typography variant="h6">Folder: {v.folderid.folderName}</Typography>
+              <Typography variant="h6">Name: {v.passwordName}</Typography>
+          
               </CardContent>
             </Card>
           ))}

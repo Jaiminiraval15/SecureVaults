@@ -3,17 +3,17 @@ const mongoose =require('mongoose');
 const passwordSchema = mongoose.Schema({
     passwordName: {
         type: String,
-        default:null,
+  
         required:true
     },
     username: {
         type: String,
-        default:null,
+      
         required:true
     },
     password: {
         type: String,
-        default:null,
+        
         required:true
     },
 

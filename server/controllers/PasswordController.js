@@ -3,7 +3,7 @@ const Password = require('../model/Password');
 const getAllPasswords = (async (req, res) => {
     try {
         const userid = req.userid
-        const password = await Password.find({ userid })
+        const password = await Password.find({ userid }).populate('folderid');
         res.status(200).json(password)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -23,6 +23,7 @@ const addPassword = (async (req, res) => {
         await vault.save();
         res.status(200).json(vault);
     } catch (error) {
+        console.error("Error adding the password:", error);
         res.status(500).json({ error: error.message });
     }
 })
