@@ -35,7 +35,7 @@ export default function SignupForm() {
           backgroundColor: "#fff",
         }}
       >
-        <h2 style={{ marginBottom: "20px", textAlign: "center" }}>SignUp</h2>
+        <h2 style={{ marginBottom: "20px", textAlign: "center" ,fontWeight:'bolder'}}>SignUp</h2>
 
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <TextField
@@ -69,6 +69,7 @@ export default function SignupForm() {
             label="Username"
             variant="outlined"
             type="text"
+            
             onChange={(e) => setUserName(e.target.value)}
             value={userName}
             size="small"
@@ -102,11 +103,11 @@ export default function SignupForm() {
         </FormControl>
 
         <Button
-          disabled={isLoading}
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ marginTop: "10px" }}
+        disabled={isLoading}
+        variant="outlined"
+        color="primary"
+        type="submit"
+        style={{ marginTop: "10px", width: "100%" ,color:'purple'}} 
         >
           Signup
         </Button>
