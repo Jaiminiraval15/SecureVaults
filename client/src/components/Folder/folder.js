@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Box, Card, CardContent, Typography, Container, Dialog, DialogTitle, DialogContent, TextField, Tooltip, Icon, IconButton, Button } from "@mui/material";
+import { Box, Card, CardContent, FormControl,Typography, Container, Dialog, DialogTitle, DialogContent, TextField, Tooltip, Icon, IconButton, Button } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from "sweetalert";
@@ -16,7 +16,7 @@ export default function Folder() {
     const [editingFolder, setEditingFolder] = useState(null);
     const handleOpenDialog = (folderId) => {
         setOpenDialog(true);
-        setEditingFolder(folderId); // Set the folder being edited
+        setEditingFolder(folderId); 
         const folderToEdit = folders.find((folder) => folder._id === folderId);
         setNewFolderName(folderToEdit?.folderName || ''); // optional chaining 
     };
@@ -24,7 +24,7 @@ export default function Folder() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setEditingFolder(null); // Clear editing state
+        setEditingFolder(null); 
         setNewFolderName("");
     };
 
@@ -155,7 +155,7 @@ export default function Folder() {
             setNewFolderName("");
 
             Swal.fire('Edited!', 'Your folder has been edited.', 'success');
-            handleCloseDialog(); // Close dialog 
+            handleCloseDialog();  
         } catch (error) {
             console.error('Error editing folder:', error);
             Swal.fire('Error!', 'Something went wrong.', 'error');
@@ -185,7 +185,6 @@ export default function Folder() {
                             display: "flex",
                             color: 'purple',
                             padding: '0.5em',
-                      
                             marginRight: '1em',
                             marginTop: '3.5em',
                             justifyContent:'flex-end'
@@ -235,24 +234,30 @@ export default function Folder() {
                 </Box>
             </Container>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
                 <DialogTitle>{editingFolder ? 'Edit Folder' : 'Add Folder'}</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        label="Folder Name"
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                        value={newFolderName}
-                        onChange={(e) => setNewFolderName(e.target.value)}
-                    />
+                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+    <TextField
+        name="FolderName"
+        label="Folder Name"
+        variant="outlined"
+        type="text"
+        onChange={(e) => setNewFolderName(e.target.value)}
+        value={newFolderName}
+        fullWidth
+        autoComplete="off"
+       
+    />
+</FormControl>
+
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         color="primary"
                         onClick={editingFolder ? handleUpdateFolder : handleAddFolder}
-                        style={{ marginTop: '1em' }}
+                        style={{ marginTop: '1em' ,color:'purple'}}
                     >
-                        {editingFolder ? 'Update Folder' : 'Add Folder'}
+                        {editingFolder ? 'Update' : 'Add'}
                     </Button>
                 </DialogContent>
             </Dialog>
