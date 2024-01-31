@@ -166,47 +166,52 @@ export default function Vault() {
       <Dialog open={openForm} onClose={() => setOpenForm(false)}>
         <DialogTitle>Add Vault</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="folder-select">Folder</InputLabel>
-            <Select
-    value={selectedFolder || ''}
-    onChange={(e) => setSelectedFolder(e.target.value)}
-    label="Folder"
-    inputProps={{
+  <FormControl fullWidth style={{ marginBottom: "20px" }}>
+    <InputLabel htmlFor="folder-select">Folder</InputLabel>
+    <Select
+      value={selectedFolder || ''}
+      onChange={(e) => setSelectedFolder(e.target.value)}
+      label="Folder"
+      inputProps={{
         name: 'folder',
         id: 'folder-select',
-    }}
->
-    {folders.map((folder) => (
+      }}
+    >
+      {folders.map((folder) => (
         <MenuItem key={folder._id} value={folder._id}>
-            {folder.folderName}
+          {folder.folderName}
         </MenuItem>
-    ))}
-</Select>
+      ))}
+    </Select>
+  </FormControl>
+  <TextField
+    label="Password Name"
+    variant="outlined"
+    fullWidth
+    value={passwordName}
+    onChange={(e) => setPasswordName(e.target.value)}
+    style={{ marginBottom: "20px" }}
+  />
+  <TextField
+    label="User Name"
+    variant="outlined"
+    fullWidth
+    value={userName}
+    onChange={(e) => setUserName(e.target.value)}
+    style={{ marginBottom: "20px" }}
+  />
+  <TextField
+    label="Password"
+    variant="outlined"
+    fullWidth
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    style={{ marginBottom: "20px" }}
+  />
+</DialogContent>
 
-          </FormControl>
-          <TextField
-            label="Password Name"
-            variant="outlined"
-            fullWidth
-            value={passwordName}
-            onChange={(e) => setPasswordName(e.target.value)}
-          />
-          <TextField
-            label="User Name"
-            variant="outlined"
-            fullWidth
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </DialogContent>
+
+
         <DialogActions>
           <Button onClick={() => setOpenForm(false)}>Cancel</Button>
           <Button onClick={handleAddVaultSubmit} color="primary">

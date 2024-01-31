@@ -27,9 +27,9 @@ export default function LoginForm() {
         style={{
           width: "300px",
           padding: "20px",
-          border: "1px solid #ccc", // Border color
-          borderRadius: "8px", // Border radius
-          backgroundColor: "#fff", // Background color
+          border: "1px solid #ccc", 
+          borderRadius: "8px", 
+          backgroundColor: "#fff", 
         }}
       >
         <h2 style={{ marginBottom: "20px", textAlign: "center" }}>Login</h2>
