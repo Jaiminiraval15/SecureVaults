@@ -38,7 +38,7 @@ const updatePassword = (async (req, res) => {
         if (vault.userid._id.toString() !== req.userid._id.toString()) {
             return res.status(402).json({ error: ' not allowed to access' })
         }
-        vault.Password = password,
+        vault.password = password,
             vault.passwordName = passwordName,
             vault.folderid = folderid,
             vault.username = username
@@ -48,6 +48,9 @@ const updatePassword = (async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 })
+
+
+
 const deletePassword = (async (req, res) => {
     try {
         const passwordid = req.params.passwordid
