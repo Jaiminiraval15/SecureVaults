@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useEncryptionFunction } from "../../hooks/useEncryptionFunction";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
+import swal from 'sweetalert';
+import Swal from "sweetalert2";
 import {
   Container,
   Button,
@@ -43,13 +45,14 @@ export default function Vault() {
   const { state } = useEncryptionContext();
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordid, setPasswordId] = useState(null);
   useEffect(() => {
     if (!user && !user.token) {
       navigate("/");
     } else {
 
       fetchData();
-      fetchFolders(); // Fetch folders when the component mounts
+      fetchFolders(); 
     }
   }, [user]);
 
@@ -124,7 +127,7 @@ export default function Vault() {
 
       // Refresh vault list
       fetchData();
-
+      swal("Vault added successfully", "", "success");
       // Reset form values
       setPasswordName("");
       setUserName("");
@@ -132,6 +135,7 @@ export default function Vault() {
 
       setOpenForm(false);
     } catch (error) {
+      swal("Something went wrong", "", "error");
       console.error("Error adding vault:", error);
     }
   };
@@ -163,19 +167,59 @@ export default function Vault() {
       });
   
       setVault(updatedVault);
-  
+      Swal.fire('Edited!', 'Your vault has been edited.', 'success');
       setEditFormOpen(false);
       setShowCardDetails(true);
 
       setSelectedVault(null);
  
     } catch (error) {
+      Swal.fire('Error!', 'Something went wrong.', 'error');
       console.error('Error editing vault:', error);
     }
   };
   
- 
-
+  
+  const handleDelete = async (passwordid) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    });
+  
+      if (result.isConfirmed) {
+        const res = await fetch(`http://localhost:2003/api/password/${passwordid}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+        });
+  
+        if (!res.ok) {
+          throw new Error("Failed to delete vault");
+        }
+  
+        const updatedVault = vault.filter((item) => item._id !== passwordid);
+        setVault(updatedVault);
+        Swal.fire(
+          'Deleted!',
+          'Your vault has been deleted.',
+          'success'
+      );
+      } 
+    } catch (error) {
+      console.error('Error deleting vault:', error);
+      swal("Oops! Something went wrong while deleting the vault item!", {
+        icon: "error",
+      });
+    }
+  };
+  
   return (
     <div>
       <Container maxWidth="lg">
@@ -302,7 +346,7 @@ export default function Vault() {
               <CardContent style={{ position: 'relative' }}>
                 <Typography variant="h6">Folder: {v.folderid.folderName}</Typography>
                 <Typography variant="h6">Name: {v.passwordName}</Typography>
-                <Button variant="outlined" onClick={() => setSelectedVault(v)} style={{ marginBottom: "10px" }}>View</Button>
+                <Button variant="outlined" onClick={() => setSelectedVault(v)} style={{ marginBottom: "10px" ,marginTop:'15px'}}>View</Button>
 
                 <EditIcon
                   color="action"
@@ -315,15 +359,20 @@ export default function Vault() {
                     
                   }}
                 />
-
-
+               
+              <DeleteOutlineIcon 
+              color="error" 
+              style={{ marginLeft: '10px' }}
+              onClick={() => handleDelete(v._id)} 
+            />
+            
               </CardContent>
             </Card>
 
-          ))}
+          ))} 
         </div>
       </Container>
-      {/* Edit Vault Dialog Box on click of edit icon*/}
+      {/* Edit Vault Dialog Box */}
 
       <Dialog open={editFormOpen && selectedVault !== null} onClose={() => setEditFormOpen(false)}>
 
