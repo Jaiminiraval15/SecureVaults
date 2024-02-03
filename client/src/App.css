@@ -1,40 +1,28 @@
 .wrapper {
   height: 100vh;
   display: flex;
-  justify-content: center; /* Horizontally center the content */
+  justify-content: center; 
   align-items: center;
 }
 
 .wrapper-box {
   padding: 30px;
-  text-align: center; /* Center the text inside the wrapper box */
+  text-align: center; 
 }
 
 .password-box {
   display: flex;
-  flex-direction: column; /* Align elements vertically */
-  align-items: center; /* Horizontally center the elements */
-}
 
+  align-items: center;
+}
 .password-box > input[type='text'] {
   width: 70%;
   height: 35px;
-  margin: 10px 0; /* Added margin top and bottom */
+  margin: 10px 0; 
   font-size: 16px;
   padding-left: 10px;
   color: #000;
   letter-spacing: 2px;
-}
-
-.button.copy-button {
-  width: 25%;
-  margin-top: 10px; /* Added margin top */
-  cursor: pointer;
-  border: 0px;
-  font-size: 14px;
-  font-weight: bolder;
-  border-radius: 5px;
-  background-color: rgba(48, 226, 12, 0.747);
 }
 
 .word-crieteria__box {

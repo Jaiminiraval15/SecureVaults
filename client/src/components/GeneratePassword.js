@@ -1,6 +1,7 @@
-import { Checkbox, Typography } from "@mui/material";
-import { useCallback,useState } from "react";
+import { Button,  Typography } from "@mui/material";
+import { useCallback,useState,useEffect,useRef } from "react";
 import '../App.css'
+
 export default function GeneratePassword() {
     const [length,setLength] = useState(8);
     const [password,setPassword] = useState('');
@@ -8,60 +9,74 @@ export default function GeneratePassword() {
     const [symbols,setSymbols] = useState(false);
     const [uppercase,setUppercase] = useState(true);
     const [lowercase,setLowercase] = useState(true);
-    const passwordGenerator = useCallback(()=>{
-        let pass = '';
-        let uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let lowercase = 'abcdefghijklmnopqrstuvwxyz';
-        let numbers = '0123456789';
-        let symbols = '!@#$%^&*()_+';
-        if(numbers){
-            pass+=numbers;
-        }
-        if(symbols){
-            pass+=symbols;
-        }
-        for(let i=1;i<=length;i++){
+    //useRef
+    const passwordRef = useRef(null);
 
-            let char = Math.floor(Math.random()*pass.length +1) ;
-            pass +=pass.charAt(char)
+   
+    const passwordGenerator = useCallback(() => {
+        let pass = '';
+        let str = '';
+        let uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        let numberChars = '0123456789';
+        let symbolChars = '!@#$%^&*()_+';
+      
+        if (numbers) str += numberChars;
+        if (symbols) str += symbolChars;
+        if (uppercase) str += uppercaseChars;
+        if (lowercase) str += lowercaseChars;
+      
+        for (let i = 1; i < length; i++) {
+          let charIndex = Math.floor(Math.random() * str.length+1);
+          pass += str.charAt(charIndex);
         }
+      
         setPassword(pass);
+      }, [length, numbers, symbols, uppercase, lowercase,setPassword]);
+
+    const copyPassword = useCallback(()=>{
+        passwordRef.current?.select();
+        passwordRef.current?.setSelectionRange(0,20);
+        window.navigator.clipboard.writeText(password);
+    },[password])
+
+    useEffect(()=>{
+
+        passwordGenerator();
     },
-    [length,numbers,symbols,uppercase,lowercase,setPassword]);
-    
+    [uppercase,lowercase,numbers,symbols,length])
     return (
         <>
         <div className="wrapper">
       <div className="container wrapper-box">
         <Typography variant="h4" style={{ color: 'purple' }}>Password Generator</Typography>
         <div className="password-box">
-          <input
+        <input
             type="text"
-            style={{ width: '100%' ,border:'1px solid purple'}}
-            placeholder=""
+            value={password}
+            style={{ width: '100%' ,border:'1px solid black'}}
+            placeholder="Password"
             autoComplete="off"
+           readOnly
+           ref={passwordRef}
            
           />
-          <button
-            className="copy-button"
-           
-            
-          >
-          
-          </button>
-        </div>
+  <Button variant="outlined" onClick={copyPassword} style={{marginInline:'0.5em'}}>Copy</Button>
+</div>
+
         <br />
         <div className="word-crieteria__box">
           <div>
-            <label>Password length</label>
+            <label>Length: {length}</label>
           </div>
           <div>
             <input
-              type="number"
-              min="4"
-              max="20"
+              type="range"
+              min={8}
+              max={20}
+              value={length}
                 style={{ width: '100%' ,border:'1px solid black',marginInline:'0.5em'}}
-             
+                onChange={(e) => setLength(e.target.value)}
             />
           </div>
         </div>
@@ -70,9 +85,10 @@ export default function GeneratePassword() {
             <label>Include uppercase </label>
           </div>
           <div>
-            <Checkbox
-              
-    
+            <input type='checkbox'
+            defaultChecked={uppercase}
+            onChange={(e)=>setUppercase((prev)=>(!prev))}
+            style={{marginInline:'0.5em'}}
             />
           </div>
         </div>
@@ -81,9 +97,10 @@ export default function GeneratePassword() {
             <label>Include lowercase </label>
           </div>
           <div>
-            <Checkbox
-             
-             
+          <input type='checkbox'
+            defaultChecked={lowercase}
+            onChange={(e)=>setLowercase((prev)=>(!prev))}
+            style={{marginInline:'0.5em'}}
             />
           </div>
         </div>
@@ -92,8 +109,10 @@ export default function GeneratePassword() {
             <label>Include numbers</label>
           </div>
           <div>
-            <Checkbox
-            
+          <input type='checkbox'
+            defaultChecked={numbers}
+            onChange={(e)=>setNumbers((prev)=>(!prev))}
+            style={{marginInline:'0.5em'}}
             />
           </div>
         </div>
@@ -102,13 +121,14 @@ export default function GeneratePassword() {
             <label>Include symbols</label>
           </div>
           <div>
-            <Checkbox
-             
-              
+          <input type='checkbox'
+            defaultChecked={symbols}
+            onChange={(e)=>setSymbols((prev)=>(!prev))}
+            style={{marginInline:'0.5em'}}
             />
           </div>
         </div>
-        
+       
       </div>
     </div>
       
