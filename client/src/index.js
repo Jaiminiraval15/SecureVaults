@@ -11,8 +11,12 @@ import Home from './components/Home';
 import Folder from './components/Folder/folder';
 import { useAuthContext } from './hooks/useAuthContext';
 import Vault from './components/Vault/vault';
-
-
+import { Navigate } from 'react-router-dom';
+import PageNotFound from './components/PageNotFound';
+const ProtectedRoute = ({ element, ...rest }) => {
+  const { user } = useAuthContext();
+  return user ? element : <Navigate to="/" state={{ from: rest.location }} />;
+};
 const router = createBrowserRouter([
   {
     path:'/',
@@ -24,11 +28,14 @@ const router = createBrowserRouter([
       },
       {
         path:'folder',
-        element: <Folder/>
+        element: <ProtectedRoute element={<Folder />} />
         
       },{
         path:'vault',
-        element:<Vault/>
+        element:<ProtectedRoute element={<Vault />} />
+      },{
+        path:'*',
+        element:<PageNotFound/>
       }
     
     ]
