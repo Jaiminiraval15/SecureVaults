@@ -19,12 +19,12 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Icon,
+  IconButton
+  
 } from "@mui/material";
 import { useEncryptionContext } from "../../hooks/useEncryptionContext";
-
-
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 export default function Vault() {
   const { user } = useAuthContext();
   const [vault, setVault] = useState([]);
@@ -42,6 +42,7 @@ export default function Vault() {
   const [editedVaultData, setEditedVaultData] = useState(null);
   const { state } = useEncryptionContext();
   const [showCardDetails, setShowCardDetails] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (!user && !user.token) {
       navigate("/");
@@ -156,17 +157,16 @@ export default function Vault() {
   
       const updatedVault = vault.map((item) => {
         if (item._id === passwordid) {
-          return editedVaultData; // Replace the edited data in the vault array
+          return editedVaultData; 
         }
         return item;
       });
   
-      setVault(updatedVault); // Update the vault state with the edited data
+      setVault(updatedVault);
   
       setEditFormOpen(false);
-      setShowCardDetails(true); // Show card details popup after editing
+      setShowCardDetails(true);
 
-      // Reset selectedVault to null after successful edit
       setSelectedVault(null);
  
     } catch (error) {
@@ -242,7 +242,7 @@ export default function Vault() {
             onChange={(e) => setUserName(e.target.value)}
             style={{ marginBottom: "20px" }}
           />
-          <TextField
+          {/* <TextField
             label="Password"
             type="password"
             variant="outlined"
@@ -250,6 +250,22 @@ export default function Vault() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={{ marginBottom: "20px" }}
+          /> */}
+          <TextField
+            label="Password"
+            type={showPassword ? 'text' : 'password'} // Toggle between text and password type
+            variant="outlined"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ marginBottom: "20px" }}
+            InputProps={{ 
+              endAdornment: (
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>
@@ -344,9 +360,11 @@ export default function Vault() {
             label="Password Name"
             variant="outlined"
             fullWidth
+          
             value={editedVaultData ? editedVaultData.passwordName : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, passwordName: e.target.value })}
             style={{ marginBottom: "20px" }}
+           
           />
           <TextField
             label="User Name"
@@ -359,11 +377,18 @@ export default function Vault() {
           <TextField
             label="Password"
             variant="outlined"
-            type='password'
+            type={showPassword ? 'text' : 'password'} //Toggle
             fullWidth
             value={editedVaultData ? decrypt(editedVaultData.password) : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, password: encrypt(e.target.value) })}
             style={{ marginBottom: "20px" }}
+            InputProps={{ 
+              endAdornment: (
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>
