@@ -45,7 +45,7 @@ export default function Vault() {
   const { state } = useEncryptionContext();
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordid, setPasswordId] = useState(null);
+
   useEffect(() => {
     if (!user && !user.token) {
       navigate("/");

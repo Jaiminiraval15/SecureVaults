@@ -69,6 +69,14 @@ export default function User() {
               marginRight: '1em',
               marginTop: '0.5em'
             }}>Folder</Link>
+             <Link to="/generatePassword"   style={{
+              color: 'purple',
+              padding: '0.5em',
+              display: 'block',
+              float: 'right',
+              marginRight: '1em',
+              marginTop: '0.5em'
+            }}>Generate Password</Link>
         </>
       )}
       {!user && (

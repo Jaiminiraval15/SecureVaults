@@ -13,6 +13,7 @@ import { useAuthContext } from './hooks/useAuthContext';
 import Vault from './components/Vault/vault';
 import { Navigate } from 'react-router-dom';
 import PageNotFound from './components/PageNotFound';
+import GeneratePassword from './components/GeneratePassword';
 const ProtectedRoute = ({ element, ...rest }) => {
   const { user } = useAuthContext();
   return user ? element : <Navigate to="/" state={{ from: rest.location }} />;
@@ -33,7 +34,12 @@ const router = createBrowserRouter([
       },{
         path:'vault',
         element:<ProtectedRoute element={<Vault />} />
-      },{
+      },
+      {
+        path:'generatePassword',
+        element : <ProtectedRoute element={<GeneratePassword />} />
+      },
+      {
         path:'*',
         element:<PageNotFound/>
       }
