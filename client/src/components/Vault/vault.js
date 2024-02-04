@@ -214,7 +214,7 @@ export default function Vault() {
       } 
     } catch (error) {
       console.error('Error deleting vault:', error);
-      swal("Oops! Something went wrong while deleting the vault item!", {
+      swal("Oops! Something went wrong while deleting the vault!", {
         icon: "error",
       });
     }
@@ -286,15 +286,7 @@ export default function Vault() {
             onChange={(e) => setUserName(e.target.value)}
             style={{ marginBottom: "20px" }}
           />
-          {/* <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ marginBottom: "20px" }}
-          /> */}
+         
           <TextField
             label="Password"
             type={showPassword ? 'text' : 'password'} // Toggle between text and password type
@@ -329,7 +321,7 @@ export default function Vault() {
             Folder Name: {selectedVault && selectedVault.folderid ? selectedVault.folderid.folderName : ""}
           </Typography>
           <Typography variant="h6" >
-            Password Name: {selectedVault ? selectedVault.passwordName : ""}
+            Vault Name: {selectedVault ? selectedVault.passwordName : ""}
           </Typography>
           <Typography variant="h6" >
             Username: {selectedVault ? decrypt(selectedVault.username) : ""}
@@ -345,7 +337,7 @@ export default function Vault() {
             <Card key={v._id} style={{ width: "200px", margin: "10px", color: "purple" }}>
               <CardContent style={{ position: 'relative' }}>
                 <Typography variant="h6">Folder: {v.folderid.folderName}</Typography>
-                <Typography variant="h6">Name: {v.passwordName}</Typography>
+                <Typography variant="h6">Vault: {v.passwordName}</Typography>
                 <Button variant="outlined" onClick={() => setSelectedVault(v)} style={{ marginBottom: "10px" ,marginTop:'15px'}}>View</Button>
 
                 <EditIcon
