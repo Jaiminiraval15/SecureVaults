@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
+const Joi = require('joi');
 const requireAuth = require('./middleware/authMiddleware')
 mongoose.connect(process.env.db_url,{
     useNewUrlParser: true,
