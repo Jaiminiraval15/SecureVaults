@@ -9,13 +9,16 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import UserProfile from './UserProfile';
 export default function User() {
   const [showForm, setShowForm] = useState(null);
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const openProfile = () => {
+    navigate('/userProfile');
+  }
     const openSignup = () => {
     setShowForm('signup');
   };
@@ -60,7 +63,7 @@ export default function User() {
               horizontal: 'center',
             }}
           >
-            <MenuItem onClick={handleClose}><AccountBoxIcon style={{marginInline:'0.2em'}}/>Profile</MenuItem>
+            <MenuItem onClick={openProfile}><AccountBoxIcon style={{marginInline:'0.2em'}}/>Profile</MenuItem>
             <MenuItem onClick={handleLogout}><LogoutIcon style={{marginInline:'0.2em'}}/>Logout</MenuItem>
           </Menu>
         

@@ -14,6 +14,7 @@ import Vault from './components/Vault/vault';
 import { Navigate } from 'react-router-dom';
 import PageNotFound from './components/PageNotFound';
 import GeneratePassword from './components/GeneratePassword';
+import UserProfile from './components/UserProfile';
 const ProtectedRoute = ({ element, ...rest }) => {
   const { user } = useAuthContext();
   return user ? element : <Navigate to="/" state={{ from: rest.location }} />;
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path:'generatePassword',
         element : <ProtectedRoute element={<GeneratePassword />} />
+      },
+      {
+        path:'userProfile',
+        element : <ProtectedRoute element={<UserProfile />} />
       },
       {
         path:'*',
