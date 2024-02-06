@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Box, Card, CardContent, FormControl,Typography, Container, Dialog, DialogTitle, DialogContent, TextField, Tooltip, Icon, IconButton, Button } from "@mui/material";
+import { Box, Card, CardContent, FormControl, Typography, Container, Dialog, DialogTitle, DialogContent, TextField, Button, Grid } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from "sweetalert";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+
 export default function Folder() {
     const { user } = useAuthContext();
     const [folders, setFolders] = useState([]);
@@ -16,15 +17,14 @@ export default function Folder() {
     const [editingFolder, setEditingFolder] = useState(null);
     const handleOpenDialog = (folderId) => {
         setOpenDialog(true);
-        setEditingFolder(folderId); 
+        setEditingFolder(folderId);
         const folderToEdit = folders.find((folder) => folder._id === folderId);
-        setNewFolderName(folderToEdit?.folderName || ''); // optional chaining 
+        setNewFolderName(folderToEdit?.folderName || '');
     };
-    
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setEditingFolder(null); 
+        setEditingFolder(null);
         setNewFolderName("");
     };
 
@@ -53,14 +53,13 @@ export default function Folder() {
             .catch(error => {
                 console.error('Error adding folder:', error);
                 if (error.message.includes('HTTP error! Status: 400')) {
-                    
                     swal("Folder already exists", "", "error");
                 } else {
                     swal("Something went wrong", "", "error");
                 }
-
             });
-    }
+    };
+
     const fetchData = async () => {
         try {
             if (user && user.token) {
@@ -69,7 +68,7 @@ export default function Folder() {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`,
-                        'User-Id': user.id 
+                        'User-Id': user.id
                     }
                 });
 
@@ -84,9 +83,9 @@ export default function Folder() {
             console.error('Error fetching folders:', error);
         }
     };
+
     const handleDeleteFolder = async (folderId) => {
         try {
-            
             const result = await Swal.fire({
                 title: 'Are you sure?',
                 icon: 'warning',
@@ -97,7 +96,6 @@ export default function Folder() {
             });
 
             if (result.isConfirmed) {
-                
                 const response = await fetch(`http://localhost:2003/api/folder/${folderId}`, {
                     method: 'DELETE',
                     headers: {
@@ -128,9 +126,9 @@ export default function Folder() {
             );
         }
     };
+
     const handleUpdateFolder = async () => {
         try {
-            
             const response = await fetch(`http://localhost:2003/api/folder/${editingFolder}`, {
                 method: 'PUT',
                 headers: {
@@ -155,107 +153,106 @@ export default function Folder() {
             setNewFolderName("");
 
             Swal.fire('Edited!', 'Your folder has been edited.', 'success');
-            handleCloseDialog();  
+            handleCloseDialog();
         } catch (error) {
             console.error('Error editing folder:', error);
             Swal.fire('Error!', 'Something went wrong.', 'error');
         }
     };
+
     useEffect(() => {
-        if(!user){
+        if (!user) {
             navigate('/')
-        }
-        else{
+        } else {
             fetchData();
         }
-       
     }, [user]);
 
     return (
         <>
             <Container maxWidth="lg">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                    <div>
-                    </div>
+                <Grid container justifyContent="space-between" alignItems="center" marginBottom="20px">
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => handleOpenDialog(null)} 
+                        onClick={() => handleOpenDialog(null)}
                         style={{
                             display: "flex",
                             color: 'purple',
                             padding: '0.5em',
                             marginRight: '1em',
                             marginTop: '3.5em',
-                            justifyContent:'flex-end'
+                            justifyContent: 'flex-end'
                         }}
                     >
                         Add Folder
                     </Button>
-                </div>
+                </Grid>
             </Container>
 
             <Container maxWidth="lg">
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', color: 'purple', marginTop: '3em' }}>
+                <Grid container spacing={2} justifyContent="flex-start">
                     {Array.isArray(folders) && folders.length > 0 ? (
                         folders.map((folder) => (
-                            <Card
-                                key={folder._id}
-                                sx={{
-                                    marginBottom: '3em',
-                                    position: 'relative',
-                                    color: 'purple',
-                                    minWidth: 275,
-                                    width: '200px',
-                                    marginRight: '10px',
-                                    marginBottom: '10px'
-                                }}
-                            >
-                                <CardContent>
-                                    <Typography variant="h6" component="div">
-                                        {folder.folderName}
-                                    </Typography>
-                                </CardContent>
-                                <DeleteOutlineIcon
-                                    color="error"
-                                    style={{ position: 'absolute', top: '5px', right: '30px', cursor: 'pointer' }}
-                                    onClick={() => handleDeleteFolder(folder._id)}
-                                />
-                                <EditIcon
-                                    color="action"
-                                    style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer' }}
-                                    onClick={() => handleOpenDialog(folder._id)}
-                                />
-                            </Card>
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={folder._id}>
+                                <Card
+                                    sx={{
+                                        marginBottom: '3em',
+                                        position: 'relative',
+                                        color: 'purple',
+                                        minWidth: 275,
+                                        width: '200px',
+                                        marginRight: '10px',
+                                        marginBottom: '10px'
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Typography variant="h6" component="div">
+                                            {folder.folderName}
+                                        </Typography>
+                                    </CardContent>
+                                    <DeleteOutlineIcon
+                                        color="error"
+                                        style={{ position: 'absolute', top: '5px', right: '30px', cursor: 'pointer' }}
+                                        onClick={() => handleDeleteFolder(folder._id)}
+                                    />
+                                    <EditIcon
+                                        color="action"
+                                        style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer' }}
+                                        onClick={() => handleOpenDialog(folder._id)}
+                                    />
+                                </Card>
+                            </Grid>
                         ))
                     ) : (
-                        <p>No folders available</p>
+                        <Grid item xs={12}>
+                            <Typography>No folders available</Typography>
+                        </Grid>
                     )}
-                </Box>
+                </Grid>
             </Container>
 
             <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
-                <DialogTitle>{editingFolder ? 'Edit Folder' : 'Add Folder'}</DialogTitle>
+           
                 <DialogContent>
-                <FormControl fullWidth sx={{ marginBottom: 2 }}>
-    <TextField
-        name="FolderName"
-        label="Folder Name"
-        variant="outlined"
-        type="text"
-        onChange={(e) => setNewFolderName(e.target.value)}
-        value={newFolderName}
-        fullWidth
-        autoComplete="off"
-       
-    />
-</FormControl>
+                    <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                        <TextField
+                            name="FolderName"
+                            label="Folder Name"
+                            variant="outlined"
+                            type="text"
+                            onChange={(e) => setNewFolderName(e.target.value)}
+                            value={newFolderName}
+                            fullWidth
+                            autoComplete="off"
+                        />
+                    </FormControl>
 
                     <Button
                         variant="outlined"
                         color="primary"
                         onClick={editingFolder ? handleUpdateFolder : handleAddFolder}
-                        style={{ marginTop: '1em' ,color:'purple'}}
+                        style={{ marginTop: '1em', color: 'purple' }}
                     >
                         {editingFolder ? 'Update' : 'Add'}
                     </Button>
@@ -263,7 +260,6 @@ export default function Folder() {
             </Dialog>
         </>
     );
-
 }
 
 

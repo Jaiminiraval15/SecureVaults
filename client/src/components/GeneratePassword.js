@@ -82,7 +82,7 @@ export default function GeneratePassword() {
         </div>
         <div className="word-crieteria__box">
           <div>
-            <label>Include uppercase </label>
+            <label>Uppercase </label>
           </div>
           <div>
             <input type='checkbox'
@@ -94,7 +94,7 @@ export default function GeneratePassword() {
         </div>
         <div className="word-crieteria__box">
           <div>
-            <label>Include lowercase </label>
+            <label>Lowercase </label>
           </div>
           <div>
           <input type='checkbox'
@@ -106,7 +106,7 @@ export default function GeneratePassword() {
         </div>
         <div className="word-crieteria__box">
           <div>
-            <label>Include numbers</label>
+            <label>Numbers</label>
           </div>
           <div>
           <input type='checkbox'
@@ -118,7 +118,7 @@ export default function GeneratePassword() {
         </div>
         <div className="word-crieteria__box">
           <div>
-            <label>Include symbols</label>
+            <label>Symbols</label>
           </div>
           <div>
           <input type='checkbox'
@@ -135,3 +135,6 @@ export default function GeneratePassword() {
         </>
     )
 }
+
+
+
