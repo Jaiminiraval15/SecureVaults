@@ -3,10 +3,14 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEncryptionFunction } from "../../hooks/useEncryptionFunction";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CircularProgress from '@mui/material/CircularProgress';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from 'sweetalert';
 import Swal from "sweetalert2";
 import {
+  Box,
+  MenuProps,
+  PaperProps,
   Container,
   Button,
   MenuItem,
@@ -21,12 +25,13 @@ import {
   Select,
   FormControl,
   InputLabel,
-  IconButton
-  
+  IconButton,
+  Grid
 } from "@mui/material";
 import { useEncryptionContext } from "../../hooks/useEncryptionContext";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 export default function Vault() {
   const { user } = useAuthContext();
   const [vault, setVault] = useState([]);
@@ -38,19 +43,18 @@ export default function Vault() {
   const [folders, setFolders] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const { encrypt, decrypt } = useEncryptionFunction();
-  const [selectedVault, setSelectedVault] = useState(null); // Store the selected vault for decryption
+  const [selectedVault, setSelectedVault] = useState(null); 
   const navigate = useNavigate();
   const [editFormOpen, setEditFormOpen] = useState(false);
   const [editedVaultData, setEditedVaultData] = useState(null);
-  const { state } = useEncryptionContext();
+  
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!user && !user.token) {
       navigate("/");
     } else {
-
       fetchData();
       fetchFolders(); 
     }
@@ -58,6 +62,7 @@ export default function Vault() {
 
   const fetchData = async () => {
     try {
+      setLoading(true); 
       if (user && user.token) {
         const res = await fetch(`http://localhost:2003/api/password`, {
           method: "GET",
@@ -80,6 +85,7 @@ export default function Vault() {
 
   const fetchFolders = async () => {
     try {
+      setLoading(true);   
       if (user && user.token) {
         const res = await fetch(`http://localhost:2003/api/folder`, {
           method: "GET",
@@ -94,7 +100,7 @@ export default function Vault() {
         }
         const data = await res.json();
         setFolders(data);
-        console.log('Folders:', data)
+      
       }
     } catch (error) {
       console.error("Error fetching Folders:", error);
@@ -112,12 +118,10 @@ export default function Vault() {
           Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({
-
           password: encryptedPassword,
           passwordName: passwordName,
           folderid: selectedFolder,
           username: encryptedUserName,
-
         }),
       });
 
@@ -125,20 +129,18 @@ export default function Vault() {
         throw new Error("Failed to add vault");
       }
 
-      // Refresh vault list
       fetchData();
       swal("Vault added successfully", "", "success");
-      // Reset form values
       setPasswordName("");
       setUserName("");
       setPassword("");
-
       setOpenForm(false);
     } catch (error) {
       swal("Something went wrong", "", "error");
       console.error("Error adding vault:", error);
     }
   };
+
   const handleEdit = async (passwordid) => {
     try {
       const res = await fetch(`http://localhost:2003/api/password/${passwordid}`, {
@@ -170,7 +172,6 @@ export default function Vault() {
       Swal.fire('Edited!', 'Your vault has been edited.', 'success');
       setEditFormOpen(false);
       setShowCardDetails(true);
-
       setSelectedVault(null);
  
     } catch (error) {
@@ -222,18 +223,17 @@ export default function Vault() {
   
   return (
     <div>
+      {!loading ?(
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>  
+      <CircularProgress />
+      </div>
+      ):(
+        <>
       <Container maxWidth="lg">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <div></div>
+        <Grid container justifyContent="space-between" alignItems="center" marginBottom="20px">
           <Button
             variant="outlined"
+            
             color="primary"
             onClick={() => setOpenForm(true)}
             style={{
@@ -247,21 +247,24 @@ export default function Vault() {
           >
             Add Vault
           </Button>
-        </div>
+        </Grid>
       </Container>
       <Dialog open={openForm} onClose={() => setOpenForm(false)}>
-        <DialogTitle>Add Vault</DialogTitle>
+     
         <DialogContent>
-          <FormControl fullWidth style={{ marginBottom: "20px" }}>
-            <InputLabel htmlFor="folder-select">Folder</InputLabel>
+          <FormControl  fullWidth sx={{ marginBottom: "20px" ,width: "100%" }}>
+         
+            <InputLabel htmlFor="folder-select" >Folder</InputLabel>
             <Select
               value={selectedFolder || ''}
               onChange={(e) => setSelectedFolder(e.target.value)}
               label="Folder"
-              inputProps={{
-                name: 'folder',
-                id: 'folder-select',
-              }}
+              fullWidth
+              // inputProps={{
+              //   name: 'folder',
+              //   id: 'folder-select',
+              // }}
+            
             >
               {folders.map((folder) => (
                 <MenuItem key={folder._id} value={folder._id}>
@@ -269,6 +272,7 @@ export default function Vault() {
                 </MenuItem>
               ))}
             </Select>
+       
           </FormControl>
           <TextField
             label="Password Name"
@@ -286,10 +290,9 @@ export default function Vault() {
             onChange={(e) => setUserName(e.target.value)}
             style={{ marginBottom: "20px" }}
           />
-         
           <TextField
             label="Password"
-            type={showPassword ? 'text' : 'password'} // Toggle between text and password type
+            type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             value={password}
@@ -311,6 +314,7 @@ export default function Vault() {
           </Button>
         </DialogActions>
       </Dialog>
+      
       <Dialog
         open={Boolean(selectedVault)}
         onClose={() => setSelectedVault(null)}
@@ -332,44 +336,37 @@ export default function Vault() {
         </DialogContent>
       </Dialog>
       <Container maxWidth="lg">
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <Grid container spacing={2}>
           {vault.map((v) => (
-            <Card key={v._id} style={{ width: "200px", margin: "10px", color: "purple" }}>
-              <CardContent style={{ position: 'relative' }}>
-                <Typography variant="h6">Folder: {v.folderid.folderName}</Typography>
-                <Typography variant="h6">Vault: {v.passwordName}</Typography>
-                <Button variant="outlined" onClick={() => setSelectedVault(v)} style={{ marginBottom: "10px" ,marginTop:'15px'}}>View</Button>
-
-                <EditIcon
-                  color="action"
-                  style={{ marginLeft: '10px' }}
-                  onClick={() => {
-                    setSelectedVault(v);
-                    setEditedVaultData(v);
-                    setSelectedFolder(v.folderid._id); 
-                    setEditFormOpen(true); 
-                    
-                  }}
-                />
-               
-              <DeleteOutlineIcon 
-              color="error" 
-              style={{ marginLeft: '10px' }}
-              onClick={() => handleDelete(v._id)} 
-            />
-            
-              </CardContent>
-            </Card>
-
+            <Grid item key={v._id} xs={12} sm={6} md={4} lg={3}>
+              <Card style={{ width: "100%", color: "purple" }}>
+                <CardContent style={{ position: 'relative' }}>
+                  <Typography variant="h6">Folder: {v.folderid.folderName}</Typography>
+                  <Typography variant="h6">Vault: {v.passwordName}</Typography>
+                  <Button variant="outlined" onClick={() => setSelectedVault(v)} style={{ marginBottom: "10px" ,marginTop:'15px'}}>View</Button>
+                  <EditIcon
+                    color="action"
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => {
+                      setSelectedVault(v);
+                      setEditedVaultData(v);
+                      setSelectedFolder(v.folderid._id); 
+                      setEditFormOpen(true); 
+                    }}
+                  />
+                  <DeleteOutlineIcon 
+                    color="error" 
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => handleDelete(v._id)} 
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
           ))} 
-        </div>
+        </Grid>
       </Container>
-      {/* Edit Vault Dialog Box */}
-
       <Dialog open={editFormOpen && selectedVault !== null} onClose={() => setEditFormOpen(false)}>
-
-
-        <DialogTitle>Edit Vault</DialogTitle>
+   
         <DialogContent>
           <FormControl fullWidth style={{ marginBottom: "20px" }}>
             <InputLabel htmlFor="folder-select">Folder</InputLabel>
@@ -394,18 +391,14 @@ export default function Vault() {
                 </MenuItem>
               ))}
             </Select>
-
-
           </FormControl>
           <TextField
             label="Password Name"
             variant="outlined"
             fullWidth
-          
             value={editedVaultData ? editedVaultData.passwordName : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, passwordName: e.target.value })}
             style={{ marginBottom: "20px" }}
-           
           />
           <TextField
             label="User Name"
@@ -437,8 +430,8 @@ export default function Vault() {
           <Button variant="outlined" style={{ color: 'purple' }} onClick={() => handleEdit(selectedVault._id)} color="primary">Save</Button>
         </DialogActions>
       </Dialog>
-
-
+      </>
+      )}
     </div>
 
   );
