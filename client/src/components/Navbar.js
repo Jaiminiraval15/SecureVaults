@@ -1,28 +1,29 @@
 import User from './User';
-import {Container,Toolbar,Box,Menu,MenuItem,Typography,IconButton,Tooltip,Avatar} from '@mui/material';
+import { Container, AppBar, Toolbar, Typography, Box, IconButton, Tooltip, Avatar } from '@mui/material';
 import { Navbar } from 'react-bootstrap';
-import AppBar from '@mui/material/AppBar';
+import MenuIcon from '@mui/icons-material/Menu';
+
 export default function Nav() {
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-    return (
-        <>
-         <Navbar expand="lg" className="bg-body-tertiary d-flex align-items-center" style={{
-                color: 'purple',
-                padding: '0.5em',
-                display: 'inline',
-                fontSize: '2em',
-                float: 'left',
-                fontFamily: 'fantasy',
-                position: 'static'
-            }}>SecureVaults
-       
-            </Navbar>
-   
-            <User/>
-       
-        </>
-    )
+
+
+  return (
+    <>
+      <AppBar position="static" color="transparent" elevation={0}>
+        <Toolbar>
+          <Navbar.Brand className="bg-body-tertiary" style={{
+            color: 'purple',
+            padding: '0.5em',
+            display: 'inline',
+            fontSize: '2em',
+            float: 'left',
+            fontFamily: 'fantasy',
+            position: 'static',
+            marginRight: 'auto'
+          }}>SecureVaults</Navbar.Brand>
+          <User />
+        </Toolbar>
+      </AppBar>
+    </>
+  )
 }
-
-
 

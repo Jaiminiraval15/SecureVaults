@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEncryptionFunction } from "../../hooks/useEncryptionFunction";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from 'sweetalert';
 import Swal from "sweetalert2";
@@ -50,7 +50,7 @@ export default function Vault() {
   
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!user && !user.token) {
       navigate("/");
@@ -62,6 +62,7 @@ export default function Vault() {
 
   const fetchData = async () => {
     try {
+      setLoading(true); 
       if (user && user.token) {
         const res = await fetch(`http://localhost:2003/api/password`, {
           method: "GET",
@@ -84,6 +85,7 @@ export default function Vault() {
 
   const fetchFolders = async () => {
     try {
+      setLoading(true);   
       if (user && user.token) {
         const res = await fetch(`http://localhost:2003/api/folder`, {
           method: "GET",
@@ -221,10 +223,17 @@ export default function Vault() {
   
   return (
     <div>
+      {!loading ?(
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>  
+      <CircularProgress />
+      </div>
+      ):(
+        <>
       <Container maxWidth="lg">
         <Grid container justifyContent="space-between" alignItems="center" marginBottom="20px">
           <Button
             variant="outlined"
+            
             color="primary"
             onClick={() => setOpenForm(true)}
             style={{
@@ -421,7 +430,10 @@ export default function Vault() {
           <Button variant="outlined" style={{ color: 'purple' }} onClick={() => handleEdit(selectedVault._id)} color="primary">Save</Button>
         </DialogActions>
       </Dialog>
+      </>
+      )}
     </div>
+
   );
 }
 

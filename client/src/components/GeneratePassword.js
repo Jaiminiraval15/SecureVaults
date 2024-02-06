@@ -47,7 +47,7 @@ export default function GeneratePassword() {
     [uppercase,lowercase,numbers,symbols,length])
     return (
         <>
-        <div className="wrapper">
+        <div className="wrapper" >
       <div className="container wrapper-box">
         <Typography variant="h4" style={{ color: 'purple' }}>Password Generator</Typography>
         <div className="password-box">

@@ -47,7 +47,11 @@ export default function User() {
     <>
       {user && (
         <>
-           
+             <div>
+            <Link to="/vault" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Vault</Link>
+            <Link to="/folder" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Folder</Link>
+            <Link to="/generatePassword" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Generate Password</Link>
+          </div>
           <Avatar src="/broken-image.jpg" style={{ float: 'right', marginRight: '1em', marginTop: '0.5em' }} onClick={openMenu}></Avatar>
           <Menu
             anchorEl={anchorEl}
@@ -66,12 +70,8 @@ export default function User() {
             <MenuItem onClick={openProfile}><AccountBoxIcon style={{marginInline:'0.2em'}}/>Profile</MenuItem>
             <MenuItem onClick={handleLogout}><LogoutIcon style={{marginInline:'0.2em'}}/>Logout</MenuItem>
           </Menu>
-        
-          <div>
-            <Link to="/vault" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Vault</Link>
-            <Link to="/folder" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Folder</Link>
-            <Link to="/generatePassword" style={{ color: 'purple', padding: '0.5em', display: 'block', float: 'right', marginRight: '1em', marginTop: '0.5em' }}>Generate Password</Link>
-          </div>
+         
+         
         </>
       )}
 
