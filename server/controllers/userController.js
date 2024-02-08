@@ -55,35 +55,6 @@ const updateUserDetails = async (req, res) => {
         res.status(500).json({ error: "Failed to update user details" });
     }
 };
-// const updateUserDetails = async (req, res) => {
-//     try {
-//         const { userid } = req;
-//         const { firstname, lastname, username, password, email } = req.body;
-        
-//         console.log("UserID:", userid);
-//         console.log("User details:", { firstname, lastname, username, password, email });
-
-//         // Simulate update operation
-//         const updatedUser = { 
-//             firstname,
-//             lastname,
-//             username,
-//             password,
-//             email,
-//             _id: userid // Assuming user ID is correctly obtained
-//         };
-        
-//         console.log("Updated user:", updatedUser);
-
-//         // Respond with simulated updated user
-//         res.status(200).json(updatedUser);
-//     } catch (error) {
-//         console.error("Error:", error.message);
-//         res.status(500).json({ error: "Failed to update user details" });
-//     }
-// };
-
-
  const deleteUser = async(req,res)=>{
         try {
             const userid = req.params.userid;
