@@ -13,48 +13,31 @@ const Vault = require('../model/Password');
     } catch (error) {
         res.status(500).json({error : error.message})
     }
- }
-//  const updateUserDetails = async (req, res) => {
-//     try {
-//         const userid = req.userid;
-//         const { firstname, lastname, username, password, email } = req.body;
-    
-//         const updatedUser = await User.findByIdAndUpdate(
-//           userid,
-//           { firstname, lastname, username, password, email },
-//           { new: true, projection: { password: 0, _id: 0, __v: 0 } }
-//         );
-    
-//         if (!updatedUser) {
-//           return res.status(404).json({ error: "User not found" });
-//         }
-    
-//         res.status(200).json(updatedUser);
-//       } catch (error) {
-//         res.status(500).json({ error: error.message });
-//       }
-// };
+    }
+
 const updateUserDetails = async (req, res) => {
     try {
-        const  userid  = req.userid;
+        const userid = req.userid;
         const { firstname, lastname, username, password, email } = req.body;
 
-    
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const updatedUser = await User.findByIdAndUpdate(
             userid,
-            { firstname, lastname, username, password, email },
-            { new: true, projection: { password: 0, _id: 0, __v: 0 } }
+            { firstname, lastname, username, password: hashedPassword, email },
+            { new: true, projection: {  _id: 0, __v: 0 } }
         );
 
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
-
+       
         res.status(200).json(updatedUser);
     } catch (error) {
-        res.status(500).json({ error: "Failed to update user details" });
+        res.status(500).json({ error: "Failed to update" });
     }
 };
+
  const deleteUser = async(req,res)=>{
         try {
             const userid = req.params.userid;
