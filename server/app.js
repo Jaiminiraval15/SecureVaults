@@ -24,5 +24,5 @@ const authRoutes = require('./routers/authRoutes')
 const userRoutes = require('./routers/userRoutes')
 app.use('/api/folder',requireAuth,folderRoutes);
 app.use('/api/password',requireAuth,passwordRoutes);
-app.use('/api/routes',authRoutes);
 app.use('/api/user',requireAuth,userRoutes);
+app.use('/api/routes',authRoutes);
