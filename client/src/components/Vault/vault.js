@@ -36,7 +36,7 @@ export default function Vault() {
   const { user } = useAuthContext();
   const [vault, setVault] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  const [menuAnchor, setMenuAnchor] = useState(null);
+ 
   const [passwordName, setPasswordName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -68,7 +68,7 @@ export default function Vault() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            'Authorization': `Bearer ${user.token}`,
           },
         });
 
@@ -260,10 +260,7 @@ export default function Vault() {
               onChange={(e) => setSelectedFolder(e.target.value)}
               label="Folder"
               fullWidth
-              // inputProps={{
-              //   name: 'folder',
-              //   id: 'folder-select',
-              // }}
+           
             
             >
               {folders.map((folder) => (
