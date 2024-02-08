@@ -21,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 const folderRoutes = require('./routers/folderRoutes')
 const passwordRoutes = require('./routers/passwordRoutes')
 const authRoutes = require('./routers/authRoutes')
+const userRoutes = require('./routers/userRoutes')
 app.use('/api/folder',requireAuth,folderRoutes);
 app.use('/api/password',requireAuth,passwordRoutes);
 app.use('/api/routes',authRoutes);
+app.use('/api/user',requireAuth,userRoutes);
