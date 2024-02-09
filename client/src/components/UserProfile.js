@@ -3,6 +3,7 @@ import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import Profile from './Settings/Profile';
 import Account from './Settings/Account';
+import Security from './Settings/Security';
 export default function UserProfile() {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -51,7 +52,7 @@ export default function UserProfile() {
        <Account />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Security/>
       </TabPanel>
       </Box>
     </div>
