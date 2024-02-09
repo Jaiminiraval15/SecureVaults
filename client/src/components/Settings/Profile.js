@@ -69,9 +69,11 @@ export default function Profile() {
 
     return (
         <Box>
-            <Typography variant="h4" gutterBottom color="primary" sx={{ textAlign: 'center', mt: 4 }}>
-                Profile
-            </Typography>
+            <Grid item xs={12}>
+                <Typography variant="h4" gutterBottom color="primary" style={{ textAlign: 'left', margin: '1.5rem' }}>
+                   Profile
+                </Typography>
+            </Grid>
             <Container maxWidth="lg">
                 <Box sx={{ textAlign: 'center', mt: 4 }}>
                     <Grid container justifyContent="center" spacing={2}>
