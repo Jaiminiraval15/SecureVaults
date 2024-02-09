@@ -20,12 +20,12 @@ const updateUserDetails = async (req, res) => {
         const userid = req.userid;
         const { firstname, lastname, username, password, email } = req.body;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
         const updatedUser = await User.findByIdAndUpdate(
             userid,
-            { firstname, lastname, username, password: hashedPassword, email },
-            { new: true, projection: {  _id: 0, __v: 0 } }
+            { firstname, lastname, username,  email },
+            { new: true, projection: { password: 0, _id: 0, __v: 0 } }
         );
 
         if (!updatedUser) {
