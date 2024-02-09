@@ -40,16 +40,17 @@ const updateUserDetails = async (req, res) => {
 
  const deleteUser = async(req,res)=>{
         try {
-            const userid = req.params.userid;
+            const userid = req.userid;
             const user = await User.findById(userid);
             if(!user){
                 return res.status(404).json({error : 'User not found'})
             }
             await Folder.deleteMany({userid:userid});
             await Vault.deleteMany({userid:userid});
-            await User.deleteOne(userid);
-            res.status(204).end();
+            await User.deleteOne({_id:userid});
+          
             res.status(200).json({message : 'User deleted successfully'})
+            
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

@@ -8,9 +8,7 @@ export const useLogout = () =>{
         //remove the user from local storage
         sessionStorage.removeItem('user')
         dispatch({type: 'LOGOUT'})
-        encryptionDispatch({type:'CLEAR_KEY'})
-
-        
+        encryptionDispatch({type:'CLEAR_KEY'})       
     }
     return { logout }
 }
