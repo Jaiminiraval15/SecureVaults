@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Box, Container, TextField, Typography, Grid, Button } from '@mui/material';
+import { Box, Container, TextField, Typography, Grid, Button, Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../../hooks/useLogout';
+import { useEncryptionFunction } from '../../hooks/useEncryptionFunction';
+import { useEncryptionContext } from '../../hooks/useEncryptionContext';
+
+
 export default function Account() {
     const [data, setData] = useState({});
+    const { state, dispatch } = useEncryptionContext();  
+    const { generateKey, encrypt, decrypt } = useEncryptionFunction();
     const { user } = useAuthContext();
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { userid } = useParams();
-    const {logout} = useLogout();
+    const { logout } = useLogout();
+    const [vaults, setVaults] = useState([]);
+  
     const fetchData = async () => {
         try {
             const response = await fetch(`http://localhost:2003/api/user/`, {
@@ -46,26 +54,27 @@ export default function Account() {
                 },
                 body: JSON.stringify({
                     username,
-                    email,
-                    password
+                    email
+               
                 })
             });
             if (response.ok) {
                 const userData = await response.json();
-                setData(userData);
+               setData(userData);
+                
+               
+               
                 swal("Updated successfully", "", "success");
-            } else {
-                swal("Failed to update", "", "error");
-                throw new Error('Failed to update user data');
             }
         } catch (error) {
             console.log('Error:', error);
         }
     };
+ 
     const deleteAccount = async (userid) => {
         console.log('User ID:', userid);
         try {
-           
+
             const confirmDelete = await swal({
                 title: "Are you sure?",
                 text: "Once deleted, you will not be able to recover your account and your credentials!",
@@ -73,8 +82,8 @@ export default function Account() {
                 buttons: true,
                 dangerMode: true,
             });
-    
-           
+
+
             if (confirmDelete) {
                 const response = await fetch(`http://localhost:2003/api/user/${userid}`, {
                     method: 'DELETE',
@@ -86,7 +95,7 @@ export default function Account() {
                 if (response.ok) {
                     console.log('Account deleted successfully');
                     swal("Account Deleted", "Your account has been successfully deleted.", "success").then(() => {
-                      
+
                         navigate('/');
                         logout();
                     });
@@ -97,13 +106,15 @@ export default function Account() {
             swal("Error", "Something went wrong while deleting your account.", "error");
         }
     }
-    
-    
+
+   
+
     useEffect(() => {
-        
- 
         fetchData();
-    }, [user, userid]);
+       
+       
+        console.log(' useEffect current Key:', state.key)
+    }, [user, userid,state]);
 
     return (
         <Box>
@@ -144,15 +155,20 @@ export default function Account() {
             <Grid item xs={12}>
                 <Typography variant="h4" gutterBottom color="primary" style={{ textAlign: 'left', margin: '1.5rem' }}>
                     Delete your Account
-                    
+
                 </Typography>
-                <Button variant='contained' color='error' style={{marginLeft:'1.5em' }} onClick={() => {
-      
-        deleteAccount(userid);
-    }}>DELETE ACCOUNT</Button>
+                <Button variant='contained' color='error' style={{ marginLeft: '1.5em' }} onClick={() => {
+
+                    deleteAccount(userid);
+                }}>DELETE ACCOUNT</Button>
 
             </Grid>
+        
         </Box>
+        
     );
 }
+
+
+
 

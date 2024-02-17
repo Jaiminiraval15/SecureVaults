@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/AuthContext';
 import { EncryptionContext, EncryptionContextProvider } from './context/EncryptionContext';
@@ -15,10 +14,16 @@ import { Navigate } from 'react-router-dom';
 import PageNotFound from './components/PageNotFound';
 import GeneratePassword from './components/GeneratePassword';
 import UserProfile from './components/UserProfile';
+import { useEncryptionContext } from './hooks/useEncryptionContext';
+
+
 const ProtectedRoute = ({ element, ...rest }) => {
   const { user } = useAuthContext();
-  return user ? element : <Navigate to="/" state={{ from: rest.location }} />;
+  
+  
+  return user? element : <Navigate to="/" state={{ from: rest.location }} />;
 };
+
 const router = createBrowserRouter([
   {
     path:'/',
@@ -54,12 +59,15 @@ const router = createBrowserRouter([
   
 ]
 )
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
        <AuthContextProvider>
-    <EncryptionContextProvider>
-    <RouterProvider router={router}></RouterProvider>
+    <EncryptionContextProvider >
+    <RouterProvider router={router}>
+      
+    </RouterProvider>
     </EncryptionContextProvider>
     </AuthContextProvider>
   </React.StrictMode>

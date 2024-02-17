@@ -1,16 +1,13 @@
+
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEncryptionFunction } from "../../hooks/useEncryptionFunction";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CircularProgress from '@mui/material/CircularProgress';
 import EditIcon from '@mui/icons-material/Edit';
 import swal from 'sweetalert';
 import Swal from "sweetalert2";
 import {
-  Box,
-  MenuProps,
-  PaperProps,
   Container,
   Button,
   MenuItem,
@@ -47,63 +44,69 @@ export default function Vault() {
   const navigate = useNavigate();
   const [editFormOpen, setEditFormOpen] = useState(false);
   const [editedVaultData, setEditedVaultData] = useState(null);
-  
+  const { state, dispatch } = useEncryptionContext();
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
-    if (!user && !user.token) {
+    if (!user && !user.token && !state.key) {
       navigate("/");
     } else {
       fetchData();
       fetchFolders(); 
+    
     }
-  }, [user]);
+  }, [user, state.key]);
+
+
 
   const fetchData = async () => {
     try {
-      setLoading(true); 
-      if (user && user.token) {
-        const res = await fetch(`http://localhost:2003/api/password`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${user.token}`,
-          },
-        });
+      setLoading(true);
+      const res = await fetch(`http://localhost:2003/api/password`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch vaults");
-        }
-        const data = await res.json();
-        setVault(data);
+      if (!res.ok) {
+        throw new Error("Failed to fetch vaults");
+        
       }
+      const data = await res.json();   
+     setVault(data);
+      setLoading(false);
+    
     } catch (error) {
       console.error("Error fetching Vaults:", error);
+      setLoading(false);
     }
   };
 
   const fetchFolders = async () => {
     try {
-      setLoading(true);   
-      if (user && user.token) {
-        const res = await fetch(`http://localhost:2003/api/folder`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+      setLoading(true);
+      const res = await fetch(`http://localhost:2003/api/folder`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch folders");
-        }
-        const data = await res.json();
-        setFolders(data);
-      
+      if (!res.ok) {
+        throw new Error("Failed to fetch folders");
       }
+
+      const data = await res.json();
+      setFolders(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching Folders:", error);
+      setLoading(false);
     }
   };
 
@@ -111,19 +114,22 @@ export default function Vault() {
     try {
       const encryptedUserName = encrypt(userName);
       const encryptedPassword = encrypt(password);
-      const response = await fetch(`http://localhost:2003/api/password/addpassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          password: encryptedPassword,
-          passwordName: passwordName,
-          folderid: selectedFolder,
-          username: encryptedUserName,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:2003/api/password/addpassword`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            password: encryptedPassword,
+            passwordName: passwordName,
+            folderid: selectedFolder,
+            username: encryptedUserName,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to add vault");
@@ -180,7 +186,6 @@ export default function Vault() {
     }
   };
   
-  
   const handleDelete = async (passwordid) => {
     try {
       const result = await Swal.fire({
@@ -222,18 +227,12 @@ export default function Vault() {
   };
   
   return (
-    <div>
-      {!loading ?(
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>  
-      <CircularProgress />
-      </div>
-      ):(
+    <div>   
         <>
       <Container maxWidth="lg">
         <Grid container justifyContent="space-between" alignItems="center" marginBottom="20px">
           <Button
             variant="outlined"
-            
             color="primary"
             onClick={() => setOpenForm(true)}
             style={{
@@ -249,19 +248,15 @@ export default function Vault() {
           </Button>
         </Grid>
       </Container>
-      <Dialog open={openForm} onClose={() => setOpenForm(false)}>
-     
+      <Dialog open={openForm} onClose={() => setOpenForm(false)}> 
         <DialogContent>
-          <FormControl  fullWidth sx={{ marginBottom: "20px" ,width: "100%" }}>
-         
+          <FormControl  fullWidth sx={{ marginBottom: "20px" ,width: "100%" }}>       
             <InputLabel htmlFor="folder-select" >Folder</InputLabel>
             <Select
               value={selectedFolder || ''}
               onChange={(e) => setSelectedFolder(e.target.value)}
               label="Folder"
-              fullWidth
-           
-            
+              fullWidth          
             >
               {folders.map((folder) => (
                 <MenuItem key={folder._id} value={folder._id}>
@@ -269,7 +264,6 @@ export default function Vault() {
                 </MenuItem>
               ))}
             </Select>
-       
           </FormControl>
           <TextField
             label="Password Name"
@@ -363,7 +357,6 @@ export default function Vault() {
         </Grid>
       </Container>
       <Dialog open={editFormOpen && selectedVault !== null} onClose={() => setEditFormOpen(false)}>
-   
         <DialogContent>
           <FormControl fullWidth style={{ marginBottom: "20px" }}>
             <InputLabel htmlFor="folder-select">Folder</InputLabel>
@@ -401,7 +394,7 @@ export default function Vault() {
             label="User Name"
             variant="outlined"
             fullWidth
-            value={editedVaultData ? decrypt(editedVaultData.username) : ''}
+            value={editedVaultData && editedVaultData.username ? decrypt(editedVaultData.username) : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, username: encrypt(e.target.value) })}
             style={{ marginBottom: "20px" }}
           />
@@ -410,7 +403,7 @@ export default function Vault() {
             variant="outlined"
             type={showPassword ? 'text' : 'password'} //Toggle
             fullWidth
-            value={editedVaultData ? decrypt(editedVaultData.password) : ''}
+            value={editedVaultData && editedVaultData.password ? decrypt(editedVaultData.password) : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, password: encrypt(e.target.value) })}
             style={{ marginBottom: "20px" }}
             InputProps={{ 
@@ -428,11 +421,11 @@ export default function Vault() {
         </DialogActions>
       </Dialog>
       </>
-      )}
     </div>
-
   );
 }
+
+
 
 
 
