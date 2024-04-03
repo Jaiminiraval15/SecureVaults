@@ -169,96 +169,87 @@ export default function Folder() {
     }, [user]);
 
     return (
+       
         <>
-            <Container maxWidth="lg">
-                <Grid container justifyContent="space-between" alignItems="center" marginBottom="20px">
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => handleOpenDialog(null)}
-                        style={{
-                            display: "flex",
+        <Container maxWidth="lg">
+            <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleOpenDialog(null)}
+                style={{
+                    display: "flex",
+                    color: 'purple',
+                    padding: '0.5em',
+                    justifyContent: 'center'
+                }}
+            >
+                Add Folder
+            </Button>
+        </Container>
+
+        <Container maxWidth="lg">
+            {Array.isArray(folders) && folders.length > 0 ? (
+                folders.map((folder) => (
+                    <Card
+                        key={folder._id}
+                        sx={{
+                            marginBottom: '3.5em',
+                            position: 'relative',
                             color: 'purple',
-                            padding: '0.5em',
-                            marginRight: '1em',
-                            marginTop: '3.5em',
-                            justifyContent: 'flex-end'
+                            minWidth: 275,
+                            width: '600px',
+                            marginRight: '10px',
+                            marginBottom: '10px'
                         }}
                     >
-                        Add Folder
-                    </Button>
-                </Grid>
-            </Container>
-
-            <Container maxWidth="lg">
-                <Grid container spacing={2} justifyContent="flex-start">
-                    {Array.isArray(folders) && folders.length > 0 ? (
-                        folders.map((folder) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={folder._id}>
-                                <Card
-                                    sx={{
-                                        marginBottom: '3em',
-                                        position: 'relative',
-                                        color: 'purple',
-                                        minWidth: 275,
-                                        width: '200px',
-                                        marginRight: '10px',
-                                        marginBottom: '10px'
-                                    }}
-                                >
-                                    <CardContent>
-                                        <Typography variant="h6" component="div">
-                                            {folder.folderName}
-                                        </Typography>
-                                    </CardContent>
-                                    <DeleteOutlineIcon
-                                        color="error"
-                                        style={{ position: 'absolute', top: '5px', right: '30px', cursor: 'pointer' }}
-                                        onClick={() => handleDeleteFolder(folder._id)}
-                                    />
-                                    <EditIcon
-                                        color="action"
-                                        style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer' }}
-                                        onClick={() => handleOpenDialog(folder._id)}
-                                    />
-                                </Card>
-                            </Grid>
-                        ))
-                    ) : (
-                        <Grid item xs={12}>
-                            <Typography>No folders available</Typography>
-                        </Grid>
-                    )}
-                </Grid>
-            </Container>
-
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
-           
-                <DialogContent>
-                    <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                        <TextField
-                            name="FolderName"
-                            label="Folder Name"
-                            variant="outlined"
-                            type="text"
-                            onChange={(e) => setNewFolderName(e.target.value)}
-                            value={newFolderName}
-                            fullWidth
-                            autoComplete="off"
+                        <CardContent>
+                            <Typography variant="h6" component="div">
+                                {folder.folderName}
+                            </Typography>
+                        </CardContent>
+                        <DeleteOutlineIcon
+                            color="error"
+                            style={{ position: 'absolute', top: '5px', right: '30px', cursor: 'pointer' }}
+                            onClick={() => handleDeleteFolder(folder._id)}
                         />
-                    </FormControl>
+                        <EditIcon
+                            color="action"
+                            style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer' }}
+                            onClick={() => handleOpenDialog(folder._id)}
+                        />
+                    </Card>
+                ))
+            ) : (
+                <Typography>No folders available</Typography>
+            )}
+        </Container>
 
-                    <Button
+        <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md">
+            <DialogContent>
+                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                    <TextField
+                        name="FolderName"
+                        label="Folder Name"
                         variant="outlined"
-                        color="primary"
-                        onClick={editingFolder ? handleUpdateFolder : handleAddFolder}
-                        style={{ marginTop: '1em', color: 'purple' }}
-                    >
-                        {editingFolder ? 'Update' : 'Add'}
-                    </Button>
-                </DialogContent>
-            </Dialog>
-        </>
+                        type="text"
+                        onChange={(e) => setNewFolderName(e.target.value)}
+                        value={newFolderName}
+                        fullWidth
+                        autoComplete="off"
+                    />
+                </FormControl>
+
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={editingFolder ? handleUpdateFolder : handleAddFolder}
+                    style={{ marginTop: '1em', color: 'purple' }}
+                >
+                    {editingFolder ? 'Update' : 'Add'}
+                </Button>
+            </DialogContent>
+        </Dialog>
+    </>
     );
 }
 

@@ -28,7 +28,7 @@ import {
   IconButton,
   Grid
 } from "@mui/material";
-import { useEncryptionContext } from "../../hooks/useEncryptionContext";
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
@@ -36,7 +36,7 @@ export default function Vault() {
   const { user } = useAuthContext();
   const [vault, setVault] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  const [menuAnchor, setMenuAnchor] = useState(null);
+  
   const [passwordName, setPasswordName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -411,7 +411,7 @@ export default function Vault() {
           <TextField
             label="Password"
             variant="outlined"
-            type={showPassword ? 'text' : 'password'} //Toggle
+            type={showPassword ? 'text' : 'password'} 
             fullWidth
             value={editedVaultData ? decrypt(editedVaultData.password) : ''}
             onChange={(e) => setEditedVaultData({ ...editedVaultData, password: encrypt(e.target.value) })}
@@ -436,6 +436,8 @@ export default function Vault() {
 
   );
 }
+
+
 
 
 
