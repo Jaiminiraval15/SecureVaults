@@ -8,9 +8,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import swal from 'sweetalert';
 import Swal from "sweetalert2";
 import {
-  Box,
-  MenuProps,
-  PaperProps,
   Container,
   Button,
   MenuItem,
@@ -260,10 +257,7 @@ export default function Vault() {
               onChange={(e) => setSelectedFolder(e.target.value)}
               label="Folder"
               fullWidth
-              // inputProps={{
-              //   name: 'folder',
-              //   id: 'folder-select',
-              // }}
+            
             
             >
               {folders.map((folder) => (

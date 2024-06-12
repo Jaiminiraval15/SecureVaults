@@ -15,7 +15,7 @@ const addFolder = (async (req, res) => {
     try {
         const userid = req.userid
         const {folderName }= req.body;
-        console.log(req.body); // Log the request body
+        console.log(req.body); 
         console.log("User ID from request:", req.userid);
         const folder = new Folder({
             folderName,
@@ -73,8 +73,6 @@ const updateFolder =(async (req,res)=>{
         const folderid = req.params.folderid;
         const folder = await Folder.findById(folderid);
         const folderName = req.body.folderName;
-        console.log("User ID from request:", req.userid);
-        console.log("User ID from request:", req.userid._id.toString());
         console.log("User ID from folder:", folder.userid);
         console.log("User ID type from folder:", typeof folder.userid.toString());
         console.log("User ID type from request:", typeof req.userid);
