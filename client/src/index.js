@@ -15,7 +15,9 @@ import PageNotFound from './components/PageNotFound';
 import GeneratePassword from './components/GeneratePassword';
 import UserProfile from './components/UserProfile';
 import { useEncryptionContext } from './hooks/useEncryptionContext';
-
+import { VaultProvider } from './context/VaultContext';
+import { FolderProvider } from './context/FolderContext';
+import { UserProvider } from './context/UserContext';
 
 const ProtectedRoute = ({ element, ...rest }) => {
   const { user } = useAuthContext();
@@ -65,9 +67,14 @@ root.render(
   <React.StrictMode>
        <AuthContextProvider>
     <EncryptionContextProvider >
-    <RouterProvider router={router}>
-      
-    </RouterProvider>
+      <UserProvider>
+    <FolderProvider>
+    <VaultProvider> 
+     
+          <RouterProvider router={router} />
+        </VaultProvider>
+        </FolderProvider>
+        </UserProvider>
     </EncryptionContextProvider>
     </AuthContextProvider>
   </React.StrictMode>

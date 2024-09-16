@@ -19,7 +19,7 @@ export const useEncryptionFunction = () => {
         return encryptedData
     }
 
-    
+
     const decrypt = (data) => {
         if (!state) {
             throw new Error('Encryption context not properly initialized');
@@ -27,10 +27,33 @@ export const useEncryptionFunction = () => {
           console.log("decrypt",state.key)
           let key = state.key
         let decryptData = CryptoJS.AES.decrypt(data, key)
+
         return decryptData.toString(CryptoJS.enc.Utf8)
     }
+    const encryptAllVaults = (vaults) => {
+        if (!Array.isArray(vaults)) {
+            throw new Error('Invalid vaults input. Expected an array of vaults.');
+        }
+        return vaults.map(vault => ({
+            ...vault,
+            username: encrypt(vault.username),
+            password: encrypt(vault.password),
+        }));
+    };
+
+    // Decrypt all vaults
+    const decryptAllVaults = (vaults) => {
+        if (!Array.isArray(vaults)) {
+            throw new Error('Invalid vaults input. Expected an array of vaults.');
+        }
+        return vaults.map(vault => ({
+            ...vault,
+            username: decrypt(vault.username),
+            password: decrypt(vault.password),
+        }));
+    };
 
 
- return { encrypt, decrypt, generateKey};
+ return { encrypt, decrypt, generateKey, encryptAllVaults, decryptAllVaults };
    
 }
